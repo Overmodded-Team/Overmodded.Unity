@@ -1,0 +1,14 @@
+{
+    "name": "SimpleLUI.Test",
+    "references": [
+        "GUID:ead65c3c9f693024da3f5a75c885a725"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

@@ -1,0 +1,15 @@
+{
+    "name": "SimpleLUI.JEM",
+    "references": [
+        "GUID:ead65c3c9f693024da3f5a75c885a725",
+        "GUID:3248e17d2c7b008408290dd767b30bc0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

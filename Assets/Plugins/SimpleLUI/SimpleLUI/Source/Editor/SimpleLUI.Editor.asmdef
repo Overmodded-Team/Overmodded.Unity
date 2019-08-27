@@ -1,0 +1,21 @@
+{
+    "name": "SimpleLUI.Editor",
+    "references": [
+        "GUID:ead65c3c9f693024da3f5a75c885a725",
+        "GUID:3248e17d2c7b008408290dd767b30bc0",
+        "GUID:c1ab18fa254a837498e7cbed6b927466"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JEM.Core.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

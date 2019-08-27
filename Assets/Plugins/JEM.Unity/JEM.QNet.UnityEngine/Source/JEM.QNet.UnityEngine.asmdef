@@ -1,0 +1,14 @@
+{
+    "name": "JEM.QNet.UnityEngine",
+    "references": [
+        "GUID:3248e17d2c7b008408290dd767b30bc0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

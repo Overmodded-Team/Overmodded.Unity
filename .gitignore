@@ -1,0 +1,53 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Dd]eploy/
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+[Mm]ono/
+[Ll]ibs/
+[Cc]ache/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+# E
+*.csproj
+*.sln
+*.tfdat
+*.manifest
+*.DotSettings
+*.DotSettings.user
+
+# game
+Config/
+
+# editor
+username.txt
+
+# etc
+Assets/ProBuilder Data/
+Assets/ProBuilder Data.meta
+
+# gen data
+LightingData.asset
+LightingData.asset.meta
+
+Lightmap-[0-99]_comp_dir.png
+Lightmap-[0-99]_comp_dir.png.meta
+Lightmap-[0-99]_comp_light.exr
+Lightmap-[0-99]_comp_light.exr.meta
+Lightmap-[0-99]_comp_shadowmask.png
+Lightmap-[0-99]_comp_shadowmask.png.meta
+ReflectionProbe-[0-99].exr
+ReflectionProbe-[0-99].exr.meta

@@ -1,0 +1,20 @@
+{
+    "name": "JEM.Test",
+    "references": [
+        "GUID:3248e17d2c7b008408290dd767b30bc0",
+        "GUID:8d894945200c5c949bf6cfb02ee385ab"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JEM.Core.dll",
+        "JEM.QNet.dll",
+        "Lidgren.Network.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

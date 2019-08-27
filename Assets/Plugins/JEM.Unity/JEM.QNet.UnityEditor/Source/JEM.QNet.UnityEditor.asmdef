@@ -1,0 +1,18 @@
+{
+    "name": "JEM.QNet.UnityEditor",
+    "references": [
+        "GUID:3248e17d2c7b008408290dd767b30bc0",
+        "GUID:c1ab18fa254a837498e7cbed6b927466",
+        "GUID:8d894945200c5c949bf6cfb02ee385ab"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

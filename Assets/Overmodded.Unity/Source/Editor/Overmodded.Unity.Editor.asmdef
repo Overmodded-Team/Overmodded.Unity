@@ -1,0 +1,29 @@
+{
+    "name": "Overmodded.Unity.Editor",
+    "references": [
+        "Unity.TextMeshPro",
+        "RFX4.Core",
+        "RFX4.Effects",
+        "JEM.QNet.UnityEditor",
+        "JEM.QNet.UnityEngine",
+        "JEM.UnityEditor",
+        "JEM.UnityEngine",
+        "Overmodded.Shared",
+        "Overmodded.Unity"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JEM.Core.dll",
+        "JEM.QNet.dll",
+        "Lidgren.Network.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

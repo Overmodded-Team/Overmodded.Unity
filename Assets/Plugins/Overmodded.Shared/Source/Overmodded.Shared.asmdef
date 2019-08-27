@@ -1,0 +1,17 @@
+{
+    "name": "Overmodded.Shared",
+    "references": [
+        "GUID:3248e17d2c7b008408290dd767b30bc0",
+        "GUID:8d894945200c5c949bf6cfb02ee385ab",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:457756d89b35d2941b3e7b37b4ece6f1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

@@ -1,0 +1,1036 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JEM.QNet</name>
+    </assembly>
+    <members>
+        <member name="T:JEM.QNet.Messages.QNetLocalChannel">
+            <summary>
+                QNet channel.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalChannel.DEFAULT">
+            <summary>
+                Default QNet channel.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalChannel.LAST_CHANNEL">
+            <summary>
+                Always last channel.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.Messages.QNetLocalHeader">
+            <summary>
+                QNet local headers.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalHeader.UNKNOWN">
+            <summary>
+                Default header.
+                Should never be used!
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalHeader.CONNECTION_MESSAGE">
+            <summary>
+                Client connection request message.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalHeader.CONNECTION_SERVER_MESSAGE">
+            <summary>
+                Server connection initialization to client message.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalHeader.CONNECTION_CLIENT_MESSAGE">
+            <summary>
+                Client initialization success to server message.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalHeader.DISCONNECTION_MESSAGE">
+            <summary>
+                Disconnection message from server to client.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetLocalHeader.LAST_HEADER">
+            <summary>
+                Always last header
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.Messages.QNetMessageDelegate">
+            <summary>
+                QNet message class delegate.
+            </summary>
+            <param name="message">Source message of this delegate.</param>
+            <param name="reader">Reader of message</param>
+            <param name="disallowRecycle">Disallow to recycle this message.</param>
+        </member>
+        <member name="T:JEM.QNet.Messages.QNetMessage">
+            <summary>
+                QNet message class.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.Messages.QNetMessage.Header">
+            <summary>
+                Header of this message.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.Messages.QNetMessage.MessageDelegate">
+            <summary>
+                Message delegate.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.Messages.QNetMessage.IsServerMessage">
+            <summary>
+                Defines whether this message has been registered on server.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.Messages.QNetMessage.IsClientMessage">
+            <summary>
+                Defines whether this message has been registered on client.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessage.#ctor(System.Boolean,System.UInt16,JEM.QNet.Messages.QNetMessageDelegate)">
+            <summary>
+                Creates new message instance.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessage.ResolveLocalHeaderSize">
+            <summary>
+                Resolve size of local header.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.Messages.QNetMessageMethod">
+            <summary>
+                How the networking deals with resends and handling of late messages
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetMessageMethod.Unknown">
+            <summary>
+                Indicates an error
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetMessageMethod.Unreliable">
+            <summary>
+                Unreliable, unordered delivery
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetMessageMethod.UnreliableSequenced">
+            <summary>
+                Unreliable delivery, but automatically dropping late messages
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetMessageMethod.ReliableUnordered">
+            <summary>
+                Reliable delivery, but unordered
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetMessageMethod.ReliableSequenced">
+            <summary>
+                Reliable delivery, except for late messages which are dropped
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.Messages.QNetMessageMethod.ReliableOrdered">
+            <summary>
+                Reliable, ordered delivery
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.Messages.QNetMessageReader">
+            <summary>
+                QNet message reader.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.Messages.QNetMessageReader.Connection">
+            <summary>
+                Source connection of this reader.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.Messages.QNetMessageReader.Message">
+            <summary/>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.#ctor(JEM.QNet.QNetConnection,Lidgren.Network.NetIncomingMessage)">
+            <summary/>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadInt32">
+            <summary>
+                Reads int from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadUInt32">
+            <summary>
+                Reads unsigned int from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadInt64">
+            <summary>
+                Reads long from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadUInt64">
+            <summary>
+                Reads unsigned long from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadInt16">
+            <summary>
+                Reads short from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadUInt16">
+            <summary>
+                Reads unsigned short from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadBool">
+            <summary>
+                Reads bool from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadSingle">
+            <summary>
+                Reads float from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadDouble">
+            <summary>
+                Reads double from array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadString">
+            <summary>
+                Reads string.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadMessage``1">
+            <summary>
+                Reads message of given type.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadByte">
+            <summary>
+                Reads bytes array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadBytes">
+            <summary>
+                Reads bytes array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.SkipPadBits">
+            <summary/>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.GetBytesRaw(System.Int32)">
+            <summary>
+                Gets all bytes of reader.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.GetMessage">
+            <summary>
+                Gets incoming message of this reader.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.Messages.QNetMessageWriter">
+            <summary>
+                QNet message writer.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.#ctor(Lidgren.Network.NetOutgoingMessage)">
+            <summary/>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteInt32(System.Int32)">
+            <summary>
+                Writes int to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteUInt32(System.UInt32)">
+            <summary>
+                Writes unsigned int to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteInt64(System.Int64)">
+            <summary>
+                Writes long to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteUInt64(System.UInt64)">
+            <summary>
+                Writes unsigned long to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteInt16(System.Int16)">
+            <summary>
+                Writes short to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteUInt16(System.UInt16)">
+            <summary>
+                Writes unsigned short to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteBool(System.Boolean)">
+            <summary>
+                Writes bool to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteSingle(System.Single)">
+            <summary>
+                Writes float to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteDouble(System.Double)">
+            <summary>
+                Writes double to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteString(System.String)">
+            <summary>
+                Writes string.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteMessage``1(``0)">
+            <summary>
+                Writes message of given type.
+            </summary>
+            <param name="message">QNetSerializedMessage based class instance.</param>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteByte(System.Byte)">
+            <summary>
+                Writes byte to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteBytes(System.Byte[])">
+            <summary>
+                Writes bytes to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteBytesRaw(System.Byte[])">
+            <summary>
+                Write raw bytes array directly.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteObject(System.Object)">
+            <summary>
+                Writes object to array.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WritePadBites">
+            <summary/>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.GetMessage">
+            <summary>
+                Gets outgoing message of this writer.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.Messages.QNetSerializedMessage">
+            <summary>
+                QNet serialized message.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetSerializedMessage.Serialize(JEM.QNet.Messages.QNetMessageWriter)">
+            <summary>
+                Serialize network message.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.Messages.QNetSerializedMessage.DeSerialize(JEM.QNet.Messages.QNetMessageReader)">
+            <summary>
+                DeSerialize network message.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetClient">
+            <inheritdoc />
+            <summary>
+                QNet client.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetClient.OnConnected">
+            <summary>
+                Client connected event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetClient.OnConnectionReady">
+            <summary>
+                Client connection ready event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetClient.OnDisconnection">
+            <summary>
+                Client disconnection event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetClient.OnMessagePoll">
+            <summary>
+                Client message poll event.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetClient.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="P:JEM.QNet.QNetClient.IsConnected">
+            <summary>
+                Defines whether this client is currently connected with server.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetClient.IsConnecting">
+            <summary>
+                Defines whether the client is currently connecting to server.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetClient.OriginalClient">
+            <summary>
+                Original lidgren client instance.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetClient.ConnectionIdentity">
+            <summary>
+                QNetClient connection identity generated by QNetServer.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetClient.OriginalConnection">
+            <summary>
+                Original lidgren client connection to server.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetClient.FixedLastDisconnectionReason">
+            <summary>
+                Fixed reason of lasted disconnection from server.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetClient.GetSignatureSize">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetClient.Start(JEM.QNet.QNetConfiguration)">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetClient.Stop(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetClient.RegisterPeerHandlers">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetClient.PollMessages">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetClient.DispatchMessages">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetClient.Send(System.Byte,JEM.QNet.Messages.QNetMessageMethod,System.UInt16,System.Object[])">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="header"></param>
+            <param name="args">Additional parameters.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetClient.Send(System.Byte,JEM.QNet.Messages.QNetMessageMethod,System.UInt16)">
+            <summary>
+                Sends message to server.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="header">Header.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetClient.Send(System.Byte,JEM.QNet.Messages.QNetMessageMethod,JEM.QNet.Messages.QNetMessageWriter)">
+            <summary>
+                Sends message to server.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="writer">Message to send.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetClient.PingServer(System.String,System.UInt16,JEM.QNet.QNetPingResult)">
+            <summary>
+                Ping target qnet server.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetPingUpdate">
+            <summary>
+                QNet ping update event.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:JEM.QNet.QNetPingResult">
+            <summary>
+                QNet ping result event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetClientConnected">
+            <summary>
+                QNetClient connection event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetClientConnectionReady">
+            <summary>
+                QNetClient connection ready event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetClientDisconnection">
+            <summary>
+                QNetClient disconnection event.
+            </summary>
+            <param name="lostConnection">
+                Defines whether the client lost connection. False means, that client was unable to connect
+                with target server.
+            </param>
+            <param name="reason">Disconnection reason.</param>
+        </member>
+        <member name="T:JEM.QNet.QNetClientMessagePoll">
+            <summary>
+                QNetClient reads the message and adds it to the poll.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetConfiguration">
+            <summary>
+                QNet connection configuration.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.AllowToPing">
+            <summary>
+                Defines whether the clients can ping this peer via unconnected message.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.AllowUnconnectedData">
+            <summary>
+                Defines whether the peer should read unconnected data.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.DrawNetworkWarningMessages">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.IpAddress">
+            <summary>
+                IpAddress with server will be bind.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.MaxConnections">
+            <summary>
+                Maximum possible connections of the server.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.Port">
+            <summary>
+                Port with the system will try to establish connection.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.UseMessageRecycling">
+            <summary>
+                Gets or sets if library should recycling messages.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.ConnectionTimeout">
+            <summary>
+                Number of seconds timeout will be postponed on a successful ping/pong.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetConfiguration.EnableUPnP">
+            <summary>
+                Enables UPnP support; enabling port forwarding and getting external ip
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetConnection">
+            <summary>
+                QNet server connection.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetConnection.Server">
+            <summary>
+                QNetServer of this connection. Obviously on client peer is equal null.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetConnection.OriginalConnection">
+            <summary>
+                Original lidgren connection.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetConnection.ConnectionIdentity">
+            <summary>
+                Identity of connection.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetConnection.ConnectionIpAddress">
+            <summary>
+                Ip address of connection.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetConnection.ConnectionPort">
+            <summary>
+                Port of connection.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.#ctor(JEM.QNet.QNetServer,Lidgren.Network.NetConnection,System.Int16)">
+            <summary>
+                Creates new connection instance.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.Send(System.Byte,JEM.QNet.Messages.QNetMessageMethod,System.UInt16,System.Object[])">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="header"></param>
+            <param name="args">Additional parameters.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.Send(System.Byte,JEM.QNet.Messages.QNetMessageMethod,System.UInt16)">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="header"></param>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.Send(System.Byte,JEM.QNet.Messages.QNetMessageMethod,JEM.QNet.Messages.QNetMessageWriter)">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="writer">Message to send.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.CloseConnection(System.String)">
+            <summary>
+                Close this connection with server.
+            </summary>
+            <param name="reason">Reason of closing connection.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.LogOperation(JEM.Core.Debugging.JEMLogType,System.String)">
+            <summary>
+                Log operation of connection.
+            </summary>
+            <param name="type">Type of log.</param>
+            <param name="content">Operation content.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.ToStringExtended">
+            <summary>
+                To string with more data of connection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JEM.QNet.QNetConnection.ToString">
+            <summary>
+                To string.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetPeerMessageResult">
+            <summary>
+                Result of peer message invoke.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetPeerMessageResult.WasSuccessful">
+            <summary/>
+        </member>
+        <member name="F:JEM.QNet.QNetPeerMessageResult.DisallowToRecycle">
+            <summary/>
+        </member>
+        <member name="T:JEM.QNet.QNetPeerStatusChanged">
+            <summary>
+                QNetPeer status change event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetPeerBeforeMessage">
+            <summary>
+                QNetPeer event called at start of message generation.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetPeer">
+            <summary>
+                QNet Peer base.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetPeer.OnStatusChanged">
+            <summary>
+                QNetPeer status change event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetPeer.OnBeforeMessage">
+            <summary>
+                QNetPeer before message event.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetPeer.IsStarted">
+            <summary>
+                Defines whether this peer started.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetPeer.OriginalPeer">
+            <summary>
+                Original lidgren peer.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetPeer.Configuration">
+            <summary>
+                Current configuration of peer.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetPeer.ConnectionLatency">
+            <summary>
+                Current connection latency.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetPeer.PeerName">
+            <summary>
+                Name of peer.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetPeer.Status">
+            <summary>
+                Peer status.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.GetSignatureSize">
+            <summary>
+                Gets size of network signature.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.Start(JEM.QNet.QNetConfiguration)">
+            <summary>
+                Starts this peer with given configuration.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.Stop(System.String)">
+            <summary>
+                Stops this peer.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.RegisterPeerHandlers">
+            <summary>
+                Register default message handlers of peer.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.GetStatisticValue(JEM.QNet.QNetStatisticName)">
+            <summary>
+                Gets statistic value from this peer.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.PollMessages">
+            <summary>
+                Receive messages.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.DispatchMessages">
+            <summary>
+                Dispatch messages.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.SetHandler(JEM.QNet.Messages.QNetMessage)">
+            <summary>
+                Registers message handler.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.InternalSetHandler(JEM.QNet.Messages.QNetMessage)">
+            <summary>
+                Message handler has been registered.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.InvokeHandler(JEM.QNet.Messages.QNetMessageReader)">
+            <summary>
+                Invokes given handler.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.GenerateOutgoingMessage(System.UInt16,System.Object[])">
+            <summary>
+                Generates outgoing message.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetPeer.ReadIncomingMessage(JEM.QNet.QNetConnection,Lidgren.Network.NetIncomingMessage)">
+            <summary>
+                Reads incoming message.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetPeerStatus">
+            <summary>
+                QNet status.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetPeerStatus.NotConnected">
+            <summary>
+                Not connected with another peer.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetPeerStatus.Connecting">
+            <summary>
+                Trying to connect with target peer.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetPeerStatus.Connected">
+            <summary>
+                Connected with other peer.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetPeerStatus.Disconnected">
+            <summary>
+                Disconnected/not connected with any peer.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetServer">
+            <inheritdoc />
+            <summary>
+                QNet server.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.AcceptNewConnections">
+            <summary>
+                Defines whether the new connections should be accepted.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.NewConnectionDeniedMessage">
+            <summary>
+                Message that will be send to client while new connections are not accepted.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnApproveConnection">
+            <summary>
+                Server approve connection event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnConnectionAuthorizing">
+            <summary>
+                Connection authorizing event.
+                This event is invoked when server is sending client's identity.
+                Here we can send some initial data like nickname or something to load.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnConnectionLost">
+            <summary>
+                Connection lost event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnConnectionReady">
+            <summary>
+                Connection ready event.
+                Client respond to OnConnectionAuthorizing event.
+                If received, client has been initialized successfully.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnConnectionReceived">
+            <summary>
+                Connection receive event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnServerStop">
+            <summary>
+                Server stop event.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnUnconnectedDataReceived">
+            <summary>
+                Server unconnected data received.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetServer.OnMessagePoll">
+            <summary>
+                Client message poll event.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="P:JEM.QNet.QNetServer.OriginalServer">
+            <summary>
+                Original lidgren server instance.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetServer.IsHostServer">
+            <summary>
+                Defines whether this server is at the same time client.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetServer.OriginalHostConnection">
+            <summary>
+                Original connection of host client.
+            </summary>
+        </member>
+        <member name="P:JEM.QNet.QNetServer.Connections">
+            <summary>
+                List of all connections.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.GetSignatureSize">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetServer.Start(JEM.QNet.QNetConfiguration)">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetServer.Stop(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetServer.RegisterPeerHandlers">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetServer.PollMessages">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetServer.DispatchMessages">
+            <inheritdoc />
+        </member>
+        <member name="M:JEM.QNet.QNetServer.GetConnection(System.Int16)">
+            <summary>
+                Gets QNet connection by connection identity.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.GetConnection(Lidgren.Network.NetConnection)">
+            <summary>
+                Gets QNet connection by original connection.
+            </summary>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.Send(JEM.QNet.QNetConnection,System.Byte,JEM.QNet.Messages.QNetMessageMethod,System.UInt16,System.Object[])">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="connection">Target connection of message.</param>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="header"></param>
+            <param name="args">Additional parameters.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.Send(JEM.QNet.QNetConnection,System.Byte,JEM.QNet.Messages.QNetMessageMethod,System.UInt16)">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="connection">Target connection of message.</param>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="header"></param>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.Send(JEM.QNet.QNetConnection,System.Byte,JEM.QNet.Messages.QNetMessageMethod,JEM.QNet.Messages.QNetMessageWriter)">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="connection">Target connection of message.</param>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="writer">Message to send.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.SendToAll(System.Byte,JEM.QNet.Messages.QNetMessageMethod,System.UInt16)">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="header">Header</param>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.SendToAll(System.Byte,JEM.QNet.Messages.QNetMessageMethod,JEM.QNet.Messages.QNetMessageWriter)">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="writer">Message to send.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.SendToAll(JEM.QNet.QNetConnection,System.Byte,JEM.QNet.Messages.QNetMessageMethod,JEM.QNet.Messages.QNetMessageWriter)">
+            <summary>
+                Sends message to given connection.
+            </summary>
+            <param name="except">Message will be send to all connections except this.</param>
+            <param name="channel">Channel of message.</param>
+            <param name="method">Method of message sending.</param>
+            <param name="writer">Message to send.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.CloseConnection(JEM.QNet.QNetConnection,System.String)">
+            <summary>
+                Closes given connection with server.
+            </summary>
+            <param name="connection">Connection to close.</param>
+            <param name="reason">Connection closing reason.</param>
+        </member>
+        <member name="M:JEM.QNet.QNetServer.SetUpHostServer(Lidgren.Network.NetConnection)">
+            <summary>
+                Setups host server.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetServerConnectionReceived">
+            <summary>
+                QNetServer connection receive event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetServerConnectionAuthorizing">
+            <summary>
+                QNetServer connection authorizing event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetServerConnectionReady">
+            <summary>
+                QNetServer connection ready event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetServerConnectionLost">
+            <summary>
+                QNetServer connection lost event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetServerStop">
+            <summary>
+                QNerServer stop event.
+            </summary>
+            <param name="reason"></param>
+        </member>
+        <member name="T:JEM.QNet.QNetUnconnectedDataReceived">
+            <summary>
+                Server unconnected data received event.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetApprovalConnection">
+            <summary>
+                Server Approval message.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetServerMessagePoll">
+            <summary>
+                QNetServer reads the message and adds it to the poll.
+            </summary>
+        </member>
+        <member name="T:JEM.QNet.QNetStatisticName">
+            <summary>
+                QNet network statistic name.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.ReceivedBytes">
+            <summary>
+                Total bytes received.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.ReceivedPackets">
+            <summary>
+                Total packets received.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.ReceivedMessages">
+            <summary>
+                Total messages received.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.SentBytes">
+            <summary>
+                Total bytes sent.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.SentPackets">
+            <summary>
+                Total packets sent.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.SentMessages">
+            <summary>
+                Total messages sent.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.MessagesInRecycle">
+            <summary>
+                Amount of messages in recycle.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.AllocatedBytes">
+            <summary>
+                Allocated bytes.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.ConnectionLatency">
+            <summary>
+                Network latency of current connection.
+            </summary>
+        </member>
+        <member name="F:JEM.QNet.QNetStatisticName.Dropped">
+            <summary/>
+        </member>
+    </members>
+</doc>
