@@ -36,6 +36,7 @@ Config/
 username.txt
 
 # etc
+ProjectSettings/Packages/
 Assets/ProBuilder Data/
 Assets/ProBuilder Data.meta
 

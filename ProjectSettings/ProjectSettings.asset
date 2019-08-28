@@ -548,7 +548,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    1: 
+    1: KRIPTO_FX_HDRP_RENDERING
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
