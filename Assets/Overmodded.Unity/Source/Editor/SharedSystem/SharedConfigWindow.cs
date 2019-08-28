@@ -27,6 +27,9 @@ namespace Overmodded.Unity.Editor.SharedSystem
 
             GUILayout.Label("Local", EditorStyles.boldLabel);
             localSharedData.value = (SharedEditorData) EditorGUILayout.ObjectField("Local Shared Data", localSharedData.value, typeof(SharedEditorData), false);
+            EditorGUILayout.HelpBox("Local Shared Data asset is a Database that holds all Overmodded.UnityEditor data that then can be used the in game. " +
+                                    "This asset can be shared over other editors to get access to it's records. " +
+                                    "(For ex. you can get reference to character defined in another unity editor project.)", MessageType.Info, true);
 
             EditorGUILayout.Space();
             GUILayout.Label("External", EditorStyles.boldLabel);
@@ -45,7 +48,7 @@ namespace Overmodded.Unity.Editor.SharedSystem
             }
         }
 
-        [MenuItem("Tools/Overmodded/Shared Configuration")]
+        [MenuItem("Overmodded/Local Configuration")]
         public static void ShowWindow() => GetWindow<SharedConfigWindow>(true, "Overmodded Shared Configuration", true);       
     }
 }

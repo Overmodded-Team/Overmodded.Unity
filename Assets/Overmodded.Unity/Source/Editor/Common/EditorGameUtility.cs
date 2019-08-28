@@ -4,6 +4,8 @@
 // Copyright (c) 2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
+using Overmodded.Common;
+using Overmodded.Gameplay.Character;
 using Overmodded.Unity.Editor.Objects;
 using Overmodded.Unity.Editor.SharedSystem;
 using System.Collections.Generic;
@@ -19,12 +21,54 @@ namespace Overmodded.Unity.Editor.Common
     /// </summary>
     public static class EditorGameUtility
     {
+        public static int CharacterSettingsField(string label, int characterIdentity) => DatabaseItemField<CharacterDatabase, CharacterSettings>(label, characterIdentity);
+
         /// <summary>
-        ///     Draws a Level Spawn name field.
+        ///     Draws a Database Item field.
         /// </summary>
-        public static string LevelSpawnNameField(string spawnName)
+        public static int DatabaseItemField<TDatabase, TItem>(string label, int itemIdentity) where TDatabase : DatabaseManager<TItem> where TItem : DatabaseItem
         {
-            return LevelSpawnNameField(null, spawnName);
+            EditorGUILayout.BeginHorizontal();
+            var records = SharedEditorDataManager.GetRecords<TDatabase, TItem>();
+            var recordsIdentityList = new List<int>();
+            var recordsFixedNames = new List<string>();
+            for (var i1 = 0; i1 < records.Count; i1++)
+            {
+                var s = records[i1];
+                if (recordsIdentityList.Contains(s.Item3))
+                {
+                    Debug.LogWarning($"There is more than one item with identity {s.Item3} in database of type {typeof(TDatabase).Name}!");
+                    continue;
+                }
+
+                bool has = records.Where((g2, i2) => i1 != i2 && s.Item2 == g2.Item2).Any();
+                if (has)
+                    recordsFixedNames.Add($"{s.Item2} ({SharedEditorDataManager.GUIDToEditorDataName(s.Item1)})");
+                else recordsFixedNames.Add($"{s.Item2}");
+                recordsIdentityList.Add(s.Item3);
+            }
+
+            if (recordsIdentityList.Count == 0)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(label, $"List of {typeof(TItem).Name} is empty.");
+                EditorGUILayout.EndHorizontal();
+            }
+            else
+            {
+                var index = recordsIdentityList.Contains(itemIdentity) ? recordsIdentityList.IndexOf(itemIdentity) : 0;
+                index = EditorGUILayout.Popup(label, index, recordsFixedNames.ToArray());
+                itemIdentity = recordsIdentityList[index];
+                if (GUILayout.Button("Info", EditorStyles.miniButton, GUILayout.Width(35)))
+                    SharedContentEditorWindow.ShowWindowOnCharacters();
+            }
+
+            // A general databases refresh.
+            if (GUILayout.Button("Refresh", EditorStyles.miniButton, GUILayout.Width(50)))
+                SharedEditorDataManager.RefreshDatabases();
+
+            EditorGUILayout.EndHorizontal();
+            return itemIdentity;
         }
 
         /// <summary>
@@ -41,14 +85,8 @@ namespace Overmodded.Unity.Editor.Common
                 var s = spawnNames[i1];
                 bool has = spawnNames.Where((g2, i2) => i1 != i2 && s.Item2 == g2.Item2).Any();
                 if (has)
-                {
                     fixedSpawnNames.Add($"{s.Item2} ({SharedEditorDataManager.GUIDToEditorDataName(s.Item1)})");
-                }
-                else
-                {
-                    fixedSpawnNames.Add($"{s.Item2}");
-                }
-
+                else fixedSpawnNames.Add($"{s.Item2}");
                 var fullName = $"{s.Item1}.{s.Item2}";
                 fullSpawnNames.Add(fullName);
             }
@@ -56,11 +94,9 @@ namespace Overmodded.Unity.Editor.Common
             if (fullSpawnNames.Count == 0)
             {
                 EditorGUILayout.BeginHorizontal();
-                {
-                    EditorGUILayout.LabelField(label, "Spawn names list is empty.");
-                    if (GUILayout.Button("Add New", EditorStyles.miniButton))
-                        SharedContentEditorWindow.ShowWindowOnSpawnNames();
-                }
+                EditorGUILayout.LabelField(label, "Spawn names list is empty.");
+                if (GUILayout.Button("Add New", EditorStyles.miniButton))
+                    SharedContentEditorWindow.ShowWindowOnSpawnNames();
                 EditorGUILayout.EndHorizontal();
             }
             else
@@ -68,7 +104,6 @@ namespace Overmodded.Unity.Editor.Common
                 var index = fullSpawnNames.Contains(spawnName) ? fullSpawnNames.IndexOf(spawnName) : 0;
                 index = EditorGUILayout.Popup(label, index, fixedSpawnNames.ToArray());
                 spawnName = fullSpawnNames[index];
-
                 if (GUILayout.Button("Edit", EditorStyles.miniButton, GUILayout.Width(40)))
                     SharedContentEditorWindow.ShowWindowOnSpawnNames();
             }
@@ -78,7 +113,6 @@ namespace Overmodded.Unity.Editor.Common
                 SharedEditorDataManager.RefreshDatabases();
 
             EditorGUILayout.EndHorizontal();
-
             return spawnName;
         }
 

@@ -30,7 +30,7 @@ namespace Overmodded.Unity.Editor.SharedSystem
         /// <summary>
         ///     Refresh SharedEditorData assets.
         /// </summary>
-        [MenuItem("Tools/Overmodded/Refresh Databases")]
+        [MenuItem("Overmodded/Refresh Databases")]
         public static void RefreshDatabases()
         {
             var allAssets = AssetDatabase.FindAssets($"t:{nameof(SharedEditorData)}");

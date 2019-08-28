@@ -6,7 +6,9 @@
 
 using Overmodded.Unity.Editor.Common;
 using Overmodded.Unity.Editor.Objects;
+using Overmodded.Unity.Editor.SharedSystem;
 using UnityEditor;
+using UnityEngine;
 
 namespace Overmodded.Unity.Editor.Custom
 {
@@ -20,6 +22,7 @@ namespace Overmodded.Unity.Editor.Custom
 
         private SerializedProperty UniqueGUID;
         private SerializedProperty LevelSpawnNames;
+        private SerializedProperty UniqueDatabases;
 
         private void OnEnable()
         {
@@ -30,6 +33,7 @@ namespace Overmodded.Unity.Editor.Custom
 
             UniqueGUID = serializedObject.FindProperty(nameof(UniqueGUID));
             LevelSpawnNames = serializedObject.FindProperty(nameof(LevelSpawnNames));
+            UniqueDatabases = serializedObject.FindProperty(nameof(UniqueDatabases));
         }
 
         /// <inheritdoc />
@@ -58,7 +62,20 @@ namespace Overmodded.Unity.Editor.Custom
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
                 EditorGUI.indentLevel++;
+
+                GUILayout.Label("Defs", EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(LevelSpawnNames, true);
+
+                GUILayout.Label("Databases", EditorStyles.boldLabel);
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("Refresh Databases", GUILayout.Height(25)))
+                    _target.RefreshDatabases();
+                if (GUILayout.Button("Info", GUILayout.Height(25), GUILayout.Width(35)))
+                    SharedContentEditorWindow.ShowWindowOnCharacters();
+
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.PropertyField(UniqueDatabases, true);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
             }
@@ -68,6 +85,16 @@ namespace Overmodded.Unity.Editor.Custom
             EditorGameUtility.DrawTargetExtras(target);
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        [MenuItem("Overmodded/Refresh All Databases")]
+        public static void RefreshAll()
+        {
+            var localData = SharedEditorDataManager.GetLocalSharedData();
+            if (localData == null)
+                return;
+
+            localData.RefreshDatabases();
         }
     }
 }

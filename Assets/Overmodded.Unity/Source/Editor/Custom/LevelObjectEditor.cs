@@ -91,7 +91,7 @@ namespace Overmodded.Unity.Editor.Custom
         /// <summary>
         ///     Regenerates identity of all LevelObjects in scene.
         /// </summary>
-        [MenuItem("Tools/Refresh All Level Objects")]
+        [MenuItem("Overmodded/Scene/Refresh All Level Objects")]
         internal static void RefreshAllOnScene()
         {
             LevelObject[] loadedObjects = FindObjectsOfType<LevelObject>();

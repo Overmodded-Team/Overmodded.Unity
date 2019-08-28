@@ -15,3 +15,159 @@ MonoBehaviour:
   UniqueGUID: 9d7d49755791ae7499ae261ee2e5cf65
   LevelSpawnNames:
   - Default
+  UniqueDatabases:
+  - TypeName: Overmodded.Gameplay.Character.CharacterDatabase
+    Databases:
+    - Name: c_characters1
+      Records:
+      - Name: TestCharacterSettings
+        Identity: -6184
+        Properties:
+        - Key: Icon
+          Value: null
+        - Key: LocaleName
+          Value: Test Character
+        - Key: StatisticsPrefab
+          Value: TestCharacter_Statistics (Overmodded.Gameplay.Statistics.StatisticsPrefab)
+        - Key: ModelPrefab
+          Value: TestCharacter (Overmodded.Gameplay.Character.Rendering.CharacterModel)
+        - Key: HandsPrefab
+          Value: TestCharacterHands (Overmodded.Gameplay.Character.Rendering.HandsModel)
+        - Key: DefaultAnimatorController
+          Value: Default
+  - TypeName: Overmodded.Gameplay.Level.Materials.MaterialsDatabase
+    Databases:
+    - Name: c_materials1
+      Records:
+      - Name: testMaterial
+        Identity: -30199
+        Properties:
+        - Key: HitParticle
+          Value: null
+        - Key: HitDecal
+          Value: testMaterialDecal (UnityEngine.Experimental.Rendering.HDPipeline.DecalProjectorComponent)
+  - TypeName: Overmodded.Gameplay.Character.Weapons.WeaponDatabase
+    Databases:
+    - Name: c_weapons1
+      Records:
+      - Name: M4A1
+        Identity: 8507
+        Properties:
+        - Key: Type
+          Value: Rifle
+        - Key: AnimatorController
+          Value: m4a1
+        - Key: FPPModel
+          Value: M4A1 Sopmod (FPP) (Overmodded.Gameplay.Character.Weapons.WeaponModel)
+        - Key: TPPModel
+          Value: M4A1 Sopmod (TPP) (Overmodded.Gameplay.Character.Weapons.WeaponModel)
+        - Key: RoundsPerMinute
+          Value: 500
+        - Key: BulletVelocity
+          Value: 100
+        - Key: BulletVelocityTimeout
+          Value: 1
+        - Key: BulletGravity
+          Value: 1
+        - Key: BulletRadius
+          Value: 0,2
+        - Key: BulletRaycastDistance
+          Value: 5
+        - Key: BulletDamage
+          Value: 25
+        - Key: BulletTimeout
+          Value: 3
+        - Key: RecoilAndSpreadFramesLimit
+          Value: 30
+        - Key: ReloadTime
+          Value: 3
+        - Key: CameraShakeFromLast
+          Value: 15
+        - Key: CameraShakeToNext
+          Value: 8
+        - Key: SpreadWarmupTime
+          Value: 15
+        - Key: HorizontalSpread
+          Value: 3
+        - Key: VerticalSpread
+          Value: 0,5
+        - Key: HorizontalSpreadTimeMod
+          Value: 0,1
+        - Key: HorizontalSpreadTimeModCooldown
+          Value: 10
+        - Key: VerticalSpreadTimeMod
+          Value: 0,1
+        - Key: VerticalSpreadTimeModCooldown
+          Value: 10
+        - Key: SpreadTimeModEnabled
+          Value: True
+        - Key: RecoilWarmupTime
+          Value: 15
+        - Key: HorizontalRecoilTimeMod
+          Value: 1
+        - Key: HorizontalRecoilTimeModCooldown
+          Value: 10
+        - Key: VerticalRecoilTimeMod
+          Value: 20
+        - Key: VerticalRecoilTimeModCooldown
+          Value: 7
+        - Key: CanFireWhileRunning
+          Value: False
+        - Key: RunSpreadMod
+          Value: 1,3
+        - Key: RunRecoilMod
+          Value: 1,3
+        - Key: MoveSpreadMod
+          Value: 2
+        - Key: MoveRecoilMod
+          Value: 2
+        - Key: CrouchSpreadMod
+          Value: 0,8
+        - Key: CrouchRecoilMod
+          Value: 0,8
+        - Key: AimSpreadMod
+          Value: 0,7
+        - Key: AimRecoilMod
+          Value: 0,7
+        - Key: FireSounds
+          Value: UnityEngine.AudioClip[]
+        - Key: FireSoundPitchRange
+          Value: 0,2
+  - TypeName: Overmodded.Gameplay.Character.Rendering.CharacterAnimatorDatabase
+    Databases:
+    - Name: c_animations1
+      Records:
+      - Name: animator_default
+        Identity: -2809
+        Properties:
+        - Key: Name
+          Value: default
+        - Key: CharacterController
+          Value: animator_default (UnityEngine.AnimatorController)
+        - Key: HandsSimulationModel
+          Value: null
+        - Key: AnimatorFire
+          Value: Fire
+        - Key: AnimatorReload
+          Value: Reload
+        - Key: AnimatorHide
+          Value: Hide
+        - Key: AnimatorAim
+          Value: Aim
+      - Name: animator_m4a1
+        Identity: -4729
+        Properties:
+        - Key: Name
+          Value: m4a1
+        - Key: CharacterController
+          Value: animator_m4a1 (UnityEngine.AnimatorController)
+        - Key: HandsSimulationModel
+          Value: animator_m4a1 (hands) (Overmodded.Gameplay.Character.Rendering.HandsModel)
+        - Key: AnimatorFire
+          Value: Fire
+        - Key: AnimatorReload
+          Value: Reload
+        - Key: AnimatorHide
+          Value: Hide
+        - Key: AnimatorAim
+          Value: Aim
