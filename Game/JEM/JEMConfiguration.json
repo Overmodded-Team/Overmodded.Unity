@@ -1,0 +1,9 @@
+{
+  "ConfigurationAppSaveDirectory": "Config",
+  "ConfigurationBinFileExtension": ".bin",
+  "ConfigurationJEMSaveDirectory": "JEM",
+  "ConfigurationJsonFileExtension": ".json",
+  "ConfigurationSaveMethod": 2,
+  "JsonFormattingMethod": 1,
+  "NoLogs": false
+}

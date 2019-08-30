@@ -1,0 +1,11 @@
+{
+    "Include" : true,
+
+    "ModName": "ex_commands",
+    "ModSourceDirectory" : "src",
+    "ModEntryPoint" : "Overmodded.Commands.CommandsModEntry",
+
+    "CompilationOrder": 2,
+
+    "CustomLocaleFiles" : []
+  }
