@@ -13,7 +13,7 @@ using System.IO;
 namespace JEM.UnityEditor.Configuration
 {
     /// <summary>
-    ///     Internal JEM Configuration data used by JEMConfiguration.
+    ///     JEM Editor Configuration.
     /// </summary>
     [Serializable]
     public class JEMEditorConfiguration
@@ -32,16 +32,6 @@ namespace JEM.UnityEditor.Configuration
         ///     Enables/Disables operations on SetScriptingDefineSymbolsForGroup by JEMBuildFlags.
         /// </summary>
         public bool UpdateFlags = true;
-
-        private JEMEditorConfiguration()
-        {
-            // private
-        }
-
-        /// <summary>
-        ///     Currently loaded configuration of JEMConfiguration class.
-        /// </summary>
-        public static JEMEditorConfiguration Configuration { get; private set; }
 
         /// <summary>
         ///     Resolves file name of internal cfg.
@@ -66,9 +56,9 @@ namespace JEM.UnityEditor.Configuration
             {
                 Configuration = JsonConvert.DeserializeObject<JEMEditorConfiguration>(File.ReadAllText(file));
                 if (Configuration != null)
-                    JEMLogger.InternalLog($"JEMEditorInternalCfg loaded data from {file}");
+                    JEMLogger.InternalLog($"JEMEditorConfiguration loaded data from {file}");
                 else
-                    JEMLogger.InternalLog($"Unable to load JEMInternalCfg from file {file}");
+                    JEMLogger.InternalLog($"Unable to load JEMEditorConfiguration from file {file}");
                 return Configuration;
             }
 
@@ -83,8 +73,13 @@ namespace JEM.UnityEditor.Configuration
         public static void Save()
         {
             var file = ResolveConfigurationFile();
-            JEMLogger.InternalLog($"Saving JEMEditorInternalCfg data at {file}");
+            JEMLogger.InternalLog($"Saving JEMEditorConfiguration data at {file}");
             File.WriteAllText(file, JsonConvert.SerializeObject(Configuration, Formatting.Indented));
         }
+
+        /// <summary>
+        ///     Currently loaded configuration of JEMConfiguration class.
+        /// </summary>
+        public static JEMEditorConfiguration Configuration { get; private set; }
     }
 }

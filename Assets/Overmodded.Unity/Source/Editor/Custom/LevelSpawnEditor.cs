@@ -61,7 +61,7 @@ namespace Overmodded.Unity.Editor.Custom
             EditorGUILayout.PropertyField(HitMask);
 
             // Actual Content :)
-            SpawnName.stringValue = EditorGameUtility.LevelSpawnNameField("Spawn Name", SpawnName.stringValue);
+            SpawnName.stringValue = EditorGUILayoutGameUtility.LevelSpawnNameField("Spawn Name", SpawnName.stringValue);
             EditorGUILayout.PropertyField(IsDefault);
 
             serializedObject.ApplyModifiedProperties();

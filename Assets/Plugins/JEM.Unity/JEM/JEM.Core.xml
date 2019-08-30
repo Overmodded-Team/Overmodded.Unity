@@ -319,68 +319,67 @@
                 Save/Load using Newtonsoft.Json.
             </summary>
         </member>
-        <member name="T:JEM.Core.Configuration.JEMConfigurationInternal">
+        <member name="T:JEM.Core.Configuration.InternalJEMConfiguration">
             <summary>
                 Internal JEM Configuration data used by JEMConfiguration.
             </summary>
         </member>
-        <member name="F:JEM.Core.Configuration.JEMConfigurationInternal.ConfigurationAppSaveDirectory">
+        <member name="F:JEM.Core.Configuration.InternalJEMConfiguration.ConfigurationAppSaveDirectory">
             <summary>
                 Base configuration save path.
             </summary>
         </member>
-        <member name="F:JEM.Core.Configuration.JEMConfigurationInternal.ConfigurationBinFileExtension">
+        <member name="F:JEM.Core.Configuration.InternalJEMConfiguration.ConfigurationBinFileExtension">
             <summary>
                 Extension of bin configuration file.
             </summary>
         </member>
-        <member name="F:JEM.Core.Configuration.JEMConfigurationInternal.ConfigurationJEMSaveDirectory">
+        <member name="F:JEM.Core.Configuration.InternalJEMConfiguration.ConfigurationJEMSaveDirectory">
             <summary>
                 Base configuration save path.
             </summary>
         </member>
-        <member name="F:JEM.Core.Configuration.JEMConfigurationInternal.ConfigurationJsonFileExtension">
+        <member name="F:JEM.Core.Configuration.InternalJEMConfiguration.ConfigurationJsonFileExtension">
             <summary>
                 Extension of json configuration file.
             </summary>
         </member>
-        <member name="F:JEM.Core.Configuration.JEMConfigurationInternal.ConfigurationSaveMethod">
+        <member name="F:JEM.Core.Configuration.InternalJEMConfiguration.ConfigurationSaveMethod">
             <summary>
                 Configuration save method.
             </summary>
         </member>
-        <member name="F:JEM.Core.Configuration.JEMConfigurationInternal.JsonFormattingMethod">
+        <member name="F:JEM.Core.Configuration.InternalJEMConfiguration.JsonFormattingMethod">
             <summary>
                 Json formatting method.
             </summary>
         </member>
-        <member name="F:JEM.Core.Configuration.JEMConfigurationInternal.NoLogs">
+        <member name="F:JEM.Core.Configuration.InternalJEMConfiguration.NoLogs">
             <summary>
-            Of set to true, JEMLogger will ignore every single log received.
+                Of set to true, JEMLogger will ignore every single log received.
             </summary>
         </member>
-        <member name="P:JEM.Core.Configuration.JEMConfigurationInternal.Configuration">
+        <member name="P:JEM.Core.Configuration.InternalJEMConfiguration.Configuration">
             <summary>
                 Currently loaded configuration of JEMConfiguration class.
             </summary>
         </member>
-        <member name="M:JEM.Core.Configuration.JEMConfigurationInternal.ResolveConfigurationFile">
+        <member name="M:JEM.Core.Configuration.InternalJEMConfiguration.ResolveConfigurationFile">
             <summary>
                 Resolves file name of internal cfg.
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:JEM.Core.Configuration.JEMConfigurationInternal.Load">
+        <member name="M:JEM.Core.Configuration.InternalJEMConfiguration.Load">
             <summary>
                 Loads current configuration.
             </summary>
         </member>
-        <member name="M:JEM.Core.Configuration.JEMConfigurationInternal.Resolve">
+        <member name="M:JEM.Core.Configuration.InternalJEMConfiguration.Resolve">
             <summary>
                 Resolves JEM configuration.
             </summary>
         </member>
-        <member name="M:JEM.Core.Configuration.JEMConfigurationInternal.Save">
+        <member name="M:JEM.Core.Configuration.InternalJEMConfiguration.Save">
             <summary>
                 Saves current configuration.
             </summary>
@@ -581,7 +580,7 @@
         </member>
         <member name="T:JEM.Core.Extension.ExtensionArray">
             <summary>
-                Set of utility extensions to Array class.
+                Set of utility methods: Array
             </summary>
         </member>
         <member name="M:JEM.Core.Extension.ExtensionArray.GetRandom``1(``0[])">
@@ -602,7 +601,7 @@
         </member>
         <member name="T:JEM.Core.Extension.ExtensionList">
             <summary>
-                Set of utility extensions to List class.
+                Set of utility methods: List
             </summary>
         </member>
         <member name="M:JEM.Core.Extension.ExtensionList.GetRandom``1(System.Collections.Generic.List{``0})">
@@ -614,9 +613,26 @@
             <exception cref="T:System.ArgumentNullException"></exception>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="T:JEM.Core.Extension.ExtensionPath">
+            <summary>
+                Set of utility methods: Path
+            </summary>
+        </member>
+        <member name="M:JEM.Core.Extension.ExtensionPath.ResolveRelativeFilePath(System.String)">
+            <summary>
+                Resolves relative file path.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"/>
+        </member>
+        <member name="M:JEM.Core.Extension.ExtensionPath.ResolveRelativeFilePath(System.String,System.String)">
+            <summary>
+                Resolves relative file path.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"/>
+        </member>
         <member name="T:JEM.Core.Extension.ExtensionString">
             <summary>
-                Set of utility extensions to String class.
+                Set of utility methods: String
             </summary>
         </member>
         <member name="M:JEM.Core.Extension.ExtensionString.Like(System.String,System.String)">
@@ -625,7 +641,10 @@
             </summary>
         </member>
         <member name="T:JEM.Core.Extension.FastObjectFactory`1">
-            <summary/>
+            <summary>
+                JEM Fast Object Factory extension.
+                Allows for faster object instance creation.
+            </summary>
         </member>
         <member name="F:JEM.Core.Extension.FastObjectFactory`1.Instance">
             <summary/>
@@ -640,111 +659,6 @@
             <summary>
                 Check if given type has default constructor.
             </summary>
-        </member>
-        <member name="T:JEM.Core.Extras.JEMActionGroup">
-            <summary>
-                Action group.
-            </summary>
-        </member>
-        <member name="T:JEM.Core.Extras.JEMActionGroup.InvokeCheckMethod">
-            <summary>
-                Invoke check method event delegate.
-            </summary>
-            <param name="method">Method.</param>
-            <param name="target">Target of method.</param>
-            <param name="parameters"></param>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.#ctor(System.Boolean,System.Boolean)">
-            <summary>
-                Action group constructor.
-            </summary>
-            <param name="forceSameness">Sameness force active state.</param>
-            <param name="breakWhileFailed">While check event will return false, all method after source will be ignored.</param>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.#ctor(System.Boolean,System.Boolean,JEM.Core.Extras.JEMActionGroup.InvokeCheckMethod)">
-            <summary>
-                Action group constructor.
-            </summary>
-            <param name="forceSameness">Sameness force active state.</param>
-            <param name="breakWhileFailed">While check event will return false, all method after source will be ignored.</param>
-            <param name="defaultCheckMethod">Default check method.</param>
-        </member>
-        <member name="P:JEM.Core.Extras.JEMActionGroup.ForceSameness">
-            <summary>
-                Sameness force active state.
-            </summary>
-        </member>
-        <member name="P:JEM.Core.Extras.JEMActionGroup.BreakWhileFailed">
-            <summary>
-                While check event will return false, methods execution will be stopped.
-            </summary>
-        </member>
-        <member name="P:JEM.Core.Extras.JEMActionGroup.DefaultCheckMethod">
-            <summary>
-                Default check method.
-            </summary>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.RegisterAction(System.Action)">
-            <summary>
-                Registers action in group.
-            </summary>
-            <param name="action">Target action to register.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.RegisterAction``1(System.Action{``0})">
-            <summary>
-                Registers action in group.
-            </summary>
-            <param name="action">Target action to register.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.RegisterAction``2(System.Action{``0,``1})">
-            <summary>
-                Registers action in group.
-            </summary>
-            <param name="action">Target action to register.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.RegisterAction``3(System.Action{``0,``1,``2})">
-            <summary>
-                Registers action in group.
-            </summary>
-            <param name="action">Target action to register.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.RegisterAction``4(System.Action{``0,``1,``2,``3})">
-            <summary>
-                Registers action in group.
-            </summary>
-            <param name="action">Target action to register.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.RegisterDelegate(System.Delegate)">
-            <summary>
-                Registers action in group.
-            </summary>
-            <param name="targetDelegate">Target delegate to register.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.InternalRegisterAction(System.Reflection.MethodInfo,System.Object)">
-            <summary>
-                Registers action in group.
-            </summary>
-            <param name="method"></param>
-            <param name="target"></param>
-            <exception cref="T:System.ArgumentNullException"></exception>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.Invoke(System.Object[])">
-            <summary>
-                Invoke methods of whole group using default check method.
-            </summary>
-        </member>
-        <member name="M:JEM.Core.Extras.JEMActionGroup.Invoke(JEM.Core.Extras.JEMActionGroup.InvokeCheckMethod,System.Object[])">
-            <summary>
-                Invoke methods of whole group.
-            </summary>
-            <param name="checkMethod"></param>
-            <param name="parameters">Parameters for methods.</param>
         </member>
         <member name="T:JEM.Core.IO.JEMEncryptor">
             <summary>
@@ -821,6 +735,7 @@
             <param name="mode">Mode of hash.</param>
             <param name="lowCase"></param>
             <returns>Generate string in low case?</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
         </member>
         <member name="M:JEM.Core.IO.JEMMD5.Hash(System.IO.FileStream,JEM.Core.IO.JEMMD5.HashMode,System.Boolean)">
             <summary>
@@ -830,6 +745,8 @@
             <param name="mode">Mode of hash.</param>
             <param name="lowCase"></param>
             <returns>Generate string in low case?</returns>
+            <exception cref="T:System.ArgumentNullException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
         </member>
         <member name="T:JEM.Core.Debugging.JEMLogType">
             <summary>
@@ -1132,29 +1049,9 @@
             <param name="xmlString">Target xml string.</param>
             <returns>Created object from xml string.</returns>
         </member>
-        <member name="T:JEM.Core.JEMDebugMode">
-            <summary>
-                Debug mode of library.
-            </summary>
-        </member>
-        <member name="F:JEM.Core.JEMDebugMode.None">
-            <summary>
-                Nothing will be send to logger. Default mode.
-            </summary>
-        </member>
-        <member name="F:JEM.Core.JEMDebugMode.Full">
-            <summary>
-                Every action of library will be logged.
-            </summary>
-        </member>
         <member name="T:JEM.Core.JEMVar">
             <summary>
                 Global vars and internal configuration of library.
-            </summary>
-        </member>
-        <member name="F:JEM.Core.JEMVar.DebugMode">
-            <summary>
-                Current debug mode of library.
             </summary>
         </member>
         <member name="P:JEM.Core.JEMVar.IsLinux">

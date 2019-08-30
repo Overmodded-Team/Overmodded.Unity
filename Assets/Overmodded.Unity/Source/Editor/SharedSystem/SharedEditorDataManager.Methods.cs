@@ -6,7 +6,6 @@
 
 using Overmodded.Common;
 using Overmodded.Gameplay.Character;
-using Overmodded.Gameplay.Character.Rendering;
 using Overmodded.Gameplay.Character.Weapons;
 using Overmodded.Gameplay.Level.Materials;
 using System;
@@ -20,7 +19,7 @@ namespace Overmodded.Unity.Editor.SharedSystem
         public static List<Tuple<string, string, int>> GetCharacterNames() => GetRecords<CharacterDatabase, CharacterSettings>();
         public static List<Tuple<string, string, int>> GetMaterialsNames() => GetRecords<MaterialsDatabase, MaterialSettings>();
         public static List<Tuple<string, string, int>> GetWeaponsNames() => GetRecords<WeaponDatabase, WeaponSettings>();
-        public static List<Tuple<string, string, int>> GetAnimationsNames() => GetRecords<CharacterAnimatorDatabase, CharacterAnimatorPrefab>();
+        public static List<Tuple<string, string, int>> GetAnimationsNames() => GetRecords<CharacterAnimatorDatabase, CharacterAnimatorSettings>();
 
         /// <summary>
         ///     Gets list of database records. [DatabaseGUID, RecordName, RecordIdentity]
@@ -29,9 +28,15 @@ namespace Overmodded.Unity.Editor.SharedSystem
         {
             var list = new List<Tuple<string, string, int>>();
             foreach (var editor in LoadedEditorsData)
-            foreach (var database in editor.GetRecords<TDatabase, TItem>())
-            foreach (var record in database.Records)
-                list.Add(new Tuple<string, string, int>(editor.UniqueGUID, record.Name, record.Identity));
+            {
+                var records = editor.GetRecords<TDatabase, TItem>();
+                if (records == null)
+                    continue;
+
+                foreach (var database in records)
+                foreach (var record in database.Records)
+                    list.Add(new Tuple<string, string, int>(editor.UniqueGUID, record.Name, record.Identity));
+            }
 
             return list;
         }

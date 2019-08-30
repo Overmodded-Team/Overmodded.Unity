@@ -8,7 +8,6 @@
 using JetBrains.Annotations;
 using Overmodded.Common;
 using Overmodded.Gameplay.Character;
-using Overmodded.Gameplay.Character.Rendering;
 using Overmodded.Gameplay.Character.Weapons;
 using Overmodded.Gameplay.Level.Materials;
 using System;
@@ -57,7 +56,7 @@ namespace Overmodded.Unity
         public List<SharedDatabaseData> GetCharacters() => GetRecords<CharacterDatabase, CharacterSettings>();
         public List<SharedDatabaseData> GetMaterials() => GetRecords<MaterialsDatabase, MaterialSettings>();
         public List<SharedDatabaseData> GetWeapons() => GetRecords<WeaponDatabase, WeaponSettings>();
-        public List<SharedDatabaseData> GetAnimations() => GetRecords<CharacterAnimatorDatabase, CharacterAnimatorPrefab>();
+        public List<SharedDatabaseData> GetAnimations() => GetRecords<CharacterAnimatorDatabase, CharacterAnimatorSettings>();
 
         /// <summary>
         ///     Gets the list of shared databases of given type.
@@ -76,7 +75,7 @@ namespace Overmodded.Unity
             WriteDatabase<CharacterDatabase, CharacterSettings>();
             WriteDatabase<MaterialsDatabase, MaterialSettings>();
             WriteDatabase<WeaponDatabase, WeaponSettings>();
-            WriteDatabase<CharacterAnimatorDatabase, CharacterAnimatorPrefab>();
+            WriteDatabase<CharacterAnimatorDatabase, CharacterAnimatorSettings>();
         }
 
         private void WriteDatabase<TDatabase, TItem>() where TDatabase : DatabaseManager<TItem>
@@ -112,6 +111,7 @@ namespace Overmodded.Unity
         private static void ForEachAsset(Type t, [NotNull] Action<Object> onEvent)
         {
             if (onEvent == null) throw new ArgumentNullException(nameof(onEvent));
+
             var assets = AssetDatabase.FindAssets($"t:{t.Name}");
             foreach (var guid in assets)
             {

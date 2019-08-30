@@ -4,6 +4,7 @@
 // Copyright (c) 2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
+using JEM.UnityEditor;
 using Overmodded.Common;
 using System.Linq;
 using UnityEditor;
@@ -12,56 +13,102 @@ using UnityEngine;
 namespace Overmodded.Unity.Editor.Common
 {
     [CustomEditor(typeof(DatabaseItem), true, isFallback = true)]
-    internal class DatabaseItemEditor : UnityEditor.Editor
+    public class DatabaseItemEditor : UnityEditor.Editor
     {
+        private SavedBool _drawDatabaseItemContent;
+        private SavedBool _drawDatabaseItemSettings;
+
+        protected virtual void OnEnable()
+        {
+            _drawDatabaseItemContent = new SavedBool($"{GetType().Name}.DrawItemContent", false);
+            _drawDatabaseItemSettings = new SavedBool($"{nameof(DatabaseItem)}.DrawItemSettings", false);
+        }
+
         /// <inheritdoc />
         public override void OnInspectorGUI()
         {
-            // invoke base method
-            base.OnInspectorGUI();
-
-            DatabaseItem item = (DatabaseItem)target;
-
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            EditorGUILayout.BeginHorizontal("box");
+            _drawDatabaseItemContent.value = EditorGUILayout.BeginFoldoutHeaderGroup(_drawDatabaseItemContent.value, $"{JEMBetterEditor.FixedPropertyName(target.GetType().Name)} Content");
+            if (_drawDatabaseItemContent.value)
             {
-                GUILayout.FlexibleSpace();
-                GUILayout.Label($"Identity {item.Identity}");
-                GUILayout.FlexibleSpace();
-
                 EditorGUILayout.Space();
-                if (GUILayout.Button("Regenerate Identity"))
-                {
-                    RegenerateIdentity();
-                }
+                EditorGUILayout.Space();
+                EditorGUI.indentLevel++;
+                // invoke base method
+                base.OnInspectorGUI();
+                EditorGUI.indentLevel--;
+                EditorGUILayout.Space();
             }
-            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            // And draw the content...
+            DrawDatabaseItemGUI();
         }
 
+        protected void DrawDatabaseItemGUI()
+        {
+            var item = (DatabaseItem) target;
+
+            _drawDatabaseItemSettings.value = EditorGUILayout.BeginFoldoutHeaderGroup(_drawDatabaseItemSettings.value, "Database Item Settings");
+            if (_drawDatabaseItemSettings.value)
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUI.indentLevel++;
+
+                EditorGUILayout.LabelField("Unique Identity", item.Identity.ToString());
+                JEMBetterEditor.DrawProperty(" ", () =>
+                {
+                    if (GUILayout.Button("Regenerate"))
+                    {
+                        bool canRegenerate = true;
+                        if (item.Identity != 0)
+                        {
+                            canRegenerate = EditorUtility.DisplayDialog("Regenerate?",
+                                "Are you sure you want to regenerate the identity of this object? All references will be lost!",
+                                "Yes", "No");
+                        }
+
+                        if (canRegenerate)
+                            RegenerateIdentity();
+                    }
+                });
+
+                EditorGUI.indentLevel--;
+                EditorGUILayout.Space();
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            // Draw extras
+            EditorGUILayoutGameUtility.DrawTargetExtras(target);
+        }
+
+        /// <summary>
+        ///     Regenerates the identity of this item.
+        /// </summary>
         internal void RegenerateIdentity()
         {
-            DatabaseItem item = (DatabaseItem)target;
+            DatabaseItem item = (DatabaseItem) target;
             EditorUtility.SetDirty(target);
 
             string[] itemsGuiDs = AssetDatabase.FindAssets($"t:{nameof(DatabaseItem)}");
             DatabaseItem[] loadedItems = new DatabaseItem[itemsGuiDs.Length];
             for (var index = 0; index < itemsGuiDs.Length; index++)
-                loadedItems[index] =
-                    (DatabaseItem)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(itemsGuiDs[index]),
-                        typeof(DatabaseItem));
+                loadedItems[index] = (DatabaseItem) AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(itemsGuiDs[index]), typeof(DatabaseItem));
 
-            var identity = (short)Random.Range(short.MinValue, short.MaxValue);
-            bool any = loadedItems.Any(p => p != null && p.Identity == identity);
+            int identity = 0;
+            bool any = true;
             while (any)
             {
-                identity = (short)Random.Range(short.MinValue, short.MaxValue);
+                identity = GetRandomInt();
+                any = loadedItems.Any(p => p != null && p.Identity == identity);
             }
-
             item.Identity = identity;
 
             AssetDatabase.Refresh();
             AssetDatabase.SaveAssets();
         }
+
+        private static int GetRandomInt() => (int) Random.Range(int.MinValue, int.MaxValue);
     }
 }

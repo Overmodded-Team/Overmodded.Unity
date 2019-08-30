@@ -30,7 +30,8 @@ A Unity Engine/Editor extension.
     - `JEMInterfaceSliderGradient` - Script that applays gradient(based on slider position) to target image.
     - `JEMInterfaceSuperSlider` - Simple script that interpolates two sliders to create 'damage' effect.
  - JEM.UnityEditor:
-    - `JEMAssetBuilder` - Asset builder lets you quickly create and build AssetBundles. `Tools/JEM/Assets/Builder`
+    - `JEMAssetBuilder` - Asset builder lets you quickly create and build AssetBundles.
+         ![](https://i.imgur.com/QD12KTg.png)
     - `JEMBetterEditor` - Few utility methods for `EditorGUILayout`.
  - JEM.QNet.UnityEngine - A [JEM.QNet](https://github.com/TylkoDemon/JEM/tree/master/src/JEM.QNet) extenstion that lets you create multiplayer in few steps.
 

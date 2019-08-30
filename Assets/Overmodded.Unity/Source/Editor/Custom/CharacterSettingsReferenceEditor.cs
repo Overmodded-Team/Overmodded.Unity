@@ -27,7 +27,7 @@ namespace Overmodded.Unity.Editor.Custom
         /// <inheritdoc />
         public override void OnInspectorGUI()
         {
-            _target.CharacterSettingsIdentity = EditorGameUtility.CharacterSettingsField("Character Settings", _target.CharacterSettingsIdentity);
+            _target.CharacterSettingsIdentity = EditorGUILayoutGameUtility.CharacterSettingsField("Character Settings", _target.CharacterSettingsIdentity);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Overmodded.Gameplay.Character.Weapons
     {
         [Header("Controller")]
         public WeaponType Type = WeaponType.Rifle;
-        public string AnimatorController = "Unknown1";
+        public int AnimatorController = 0;
 
         [Header("Resources")]
         public WeaponModel FPPModel;

@@ -10,8 +10,9 @@ using System;
 namespace JEM.UnityEditor.AssetBundles
 {
     /// <summary>
-    ///     Assets builder configuration.
+    ///     JEM Assets Builder configuration.
     /// </summary>
+    [Serializable]
     public class JEMAssetsBuilderConfiguration
     {
         /// <summary>
@@ -19,31 +20,46 @@ namespace JEM.UnityEditor.AssetBundles
         /// </summary>
         public string PackageExtension = "bundle";
 
-        private JEMAssetsBuilderConfiguration() { }
+        /// <summary>
+        ///     Relative directory to all exported packages.
+        /// </summary>
+        public string PackageDirectory = "Exported";
 
         /// <summary>
-        ///     Gets current extension.
+        ///     Gets the file extension of AssetBundles.
         /// </summary>
-        /// <returns></returns>
-        public static string GetExtension()
+        public static string GetExtension() => $".{Configuration.PackageExtension}";
+
+        /// <summary>
+        ///     Gets the target directory of exported files.
+        /// </summary>
+        public static string GetDirectory() => Environment.CurrentDirectory + "\\" + Configuration.PackageDirectory;
+
+        /// <summary>
+        ///     Try to load configuration.
+        ///     If the configuration is already loaded, nothing will happen.
+        /// </summary>
+        public static void TryLoadConfiguration()
         {
-            return $".{Configuration.PackageExtension}";
+            if (_isConfigurationLoaded)
+                return;
+
+            Load();
+            _isConfigurationLoaded = true;
         }
 
         /// <summary>
-        ///     Loads current configuration.
+        ///     Loads configuration.
         /// </summary>
-        public static void LoadConfiguration()
+        public static void Load()
         {
-            Configuration =
-                JEMConfiguration.LoadData<JEMAssetsBuilderConfiguration>(ConfigurationFile,
-                    JEMConfigurationSaveMethod.JSON);
+            Configuration = JEMConfiguration.LoadData<JEMAssetsBuilderConfiguration>(ConfigurationFile, JEMConfigurationSaveMethod.JSON);
         }
 
         /// <summary>
         ///     Saves current configuration.
         /// </summary>
-        public static void SaveConfiguration()
+        public static void Save()
         {
             if (Configuration == null)
                 throw new NullReferenceException($"{nameof(Configuration)} is null.");
@@ -52,7 +68,7 @@ namespace JEM.UnityEditor.AssetBundles
         }
 
         /// <summary>
-        ///     Current configuration instance.
+        ///     Loaded configuration data.
         /// </summary>
         public static JEMAssetsBuilderConfiguration Configuration { get; private set; }
 
@@ -60,5 +76,7 @@ namespace JEM.UnityEditor.AssetBundles
         ///     Patch to asset builder configuration
         /// </summary>
         public static string ConfigurationFile => JEMConfiguration.ResolveJEMFilePath("AssetBuilderConfiguration");
+
+        private static bool _isConfigurationLoaded;
     }
 }

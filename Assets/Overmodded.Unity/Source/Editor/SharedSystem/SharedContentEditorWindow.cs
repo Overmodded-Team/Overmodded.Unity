@@ -4,14 +4,12 @@
 // Copyright (c) 2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
-using System.Collections.Generic;
 using JEM.UnityEditor;
 using Overmodded.Common;
 using Overmodded.Gameplay.Character;
-using Overmodded.Gameplay.Character.Rendering;
 using Overmodded.Gameplay.Character.Weapons;
 using Overmodded.Gameplay.Level.Materials;
-using Overmodded.Unity.Editor.Objects;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -112,7 +110,7 @@ namespace Overmodded.Unity.Editor.SharedSystem
                     DrawDatabases<WeaponDatabase, WeaponSettings>();
                     break;
                 case 3: // Character Animator Database
-                    DrawDatabases<CharacterAnimatorDatabase, CharacterAnimatorPrefab>();
+                    DrawDatabases<CharacterAnimatorDatabase, CharacterAnimatorSettings>();
                     break;
                 default:
                     EditorGUILayout.HelpBox("Unknown or not implemented database has been selected.", MessageType.Error,
@@ -161,44 +159,45 @@ namespace Overmodded.Unity.Editor.SharedSystem
             string perfName = $"{nameof(SharedContentEditorWindow)}.{data.UniqueGUID}.{typeof(TDatabase).Name}";
             EditorGUIUtility.labelWidth += 150;
             var records = data.GetRecords<TDatabase, TItem>();
-            foreach (var c in records)
-            {
-                var drawDatabase = new SavedBool($"{perfName}.{c.Name}", false);
-                drawDatabase.value = EditorGUILayout.BeginFoldoutHeaderGroup(drawDatabase.value, c.Name);
-                if (drawDatabase.value)
+            if (records != null)
+                foreach (var c in records)
                 {
-                    EditorGUILayout.Space();
-                    EditorGUILayout.Space();
-                    EditorGUI.indentLevel++;
-                    foreach (var r in c.Records)
+                    var drawDatabase = new SavedBool($"{perfName}.{c.Name}", false);
+                    drawDatabase.value = EditorGUILayout.BeginFoldoutHeaderGroup(drawDatabase.value, c.Name);
+                    if (drawDatabase.value)
                     {
-                        var drawRecord = new SavedBool($"{perfName}.{c.Name}.{r.Identity}", false);
-                        drawRecord.value = EditorGUILayout.Foldout(drawRecord.value, r.Name);
-                        if (drawRecord.value)
+                        EditorGUILayout.Space();
+                        EditorGUILayout.Space();
+                        EditorGUI.indentLevel++;
+                        foreach (var r in c.Records)
                         {
-                            EditorGUI.indentLevel++;
-                            EditorGUILayout.LabelField("Name", r.Name);
-                            EditorGUILayout.LabelField("Identity", r.Identity.ToString());
-                            var drawProperties = new SavedBool($"{perfName}.{c.Name}.{r.Identity}.Properties", false);
-                            drawProperties.value = EditorGUILayout.Foldout(drawProperties.value, "Properties");
-                            if (drawProperties.value)
+                            var drawRecord = new SavedBool($"{perfName}.{c.Name}.{r.Identity}", false);
+                            drawRecord.value = EditorGUILayout.Foldout(drawRecord.value, r.Name);
+                            if (drawRecord.value)
                             {
                                 EditorGUI.indentLevel++;
-                                foreach (var p in r.Properties)
-                                    EditorGUILayout.LabelField(p.Key, p.Value);
+                                EditorGUILayout.LabelField("Name", r.Name);
+                                EditorGUILayout.LabelField("Identity", r.Identity.ToString());
+                                var drawProperties = new SavedBool($"{perfName}.{c.Name}.{r.Identity}.Properties", false);
+                                drawProperties.value = EditorGUILayout.Foldout(drawProperties.value, "Properties");
+                                if (drawProperties.value)
+                                {
+                                    EditorGUI.indentLevel++;
+                                    foreach (var p in r.Properties)
+                                        EditorGUILayout.LabelField(p.Key, p.Value);
+                                    EditorGUI.indentLevel--;
+                                    EditorGUILayout.Space();
+                                }
                                 EditorGUI.indentLevel--;
                                 EditorGUILayout.Space();
                             }
-                            EditorGUI.indentLevel--;
-                            EditorGUILayout.Space();
                         }
-                    }
 
-                    EditorGUI.indentLevel--;
-                    EditorGUILayout.Space();
+                        EditorGUI.indentLevel--;
+                        EditorGUILayout.Space();
+                    }
+                    EditorGUILayout.EndFoldoutHeaderGroup();
                 }
-                EditorGUILayout.EndFoldoutHeaderGroup();
-            }
             EditorGUIUtility.labelWidth -= 150;
         }
 

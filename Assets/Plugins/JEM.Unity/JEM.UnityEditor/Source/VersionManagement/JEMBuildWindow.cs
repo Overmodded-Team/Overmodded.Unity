@@ -70,7 +70,7 @@ namespace JEM.UnityEditor.VersionManagement
 
         public static int CurrentSessionTime { get; private set; }
 
-        [MenuItem("Tools/JEM/Version/Definer")]
+        [MenuItem("JEM/JEM Version Management")]
         public static void ShowWindow()
         {
             _activeWindow = GetWindow<JEMBuildWindow>();

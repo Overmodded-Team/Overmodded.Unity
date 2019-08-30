@@ -4,11 +4,11 @@
 // Copyright (c) 2017-2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,214 +16,263 @@ namespace JEM.UnityEditor.AssetBundles
 {
     /// <inheritdoc />
     /// <summary>
-    ///     Asset builder window.
+    ///     JEM Asset Builder window.
     /// </summary>
     public class JEMAssetBuilderWindow : EditorWindow
     {
-        private Vector2 _assetsScroll;
-        private Vector2 _packagesScroll;
-
-        private void UpdateTitle()
-        {
-            // load JEM editor resources
-            JEMEditorResources.Load();
-
-            titleContent = new GUIContent("JEM Assets", JEMEditorResources.JEMIconTexture);
-        }
+        private SavedVector2 _assetsScroll;
+        private SavedVector2 _packagesScroll;
 
         private void OnEnable()
         {
-            JEMAssetsBuilderConfiguration.LoadConfiguration();
+            // Load JEM editor resources
+            JEMEditorResources.Load();
+
+            // Apply title
+            titleContent = new GUIContent("JEM Asset Builder", JEMEditorResources.JEMIconTexture);
+
+            // Try to load configuration.
+            JEMAssetsBuilderConfiguration.TryLoadConfiguration();
+
+            // Load Saved vars.
+            _assetsScroll = new SavedVector2($"{nameof(JEMAssetBuilderWindow)}.AssetsScroll", Vector2.zero);
+            _packagesScroll = new SavedVector2($"{nameof(JEMAssetBuilderWindow)}.PackagesScroll", Vector2.zero);
+
+            // Load packages!
             LoadPackages();
         }
 
-        private void OnInspectorUpdate()
-        {
-            Repaint();
-        }
+        // We may not want to save packages on window Disable...  
+        // private void OnDisable() => SavePackages();
 
-        /// <summary>
-        ///     Loads packages cfg from local disc.
-        /// </summary>
-        public static void LoadPackages()
+        // Do we need this?
+        private void OnInspectorUpdate() => Repaint();
+
+        private bool _wantToExportAll;
+        private JEMAssetBuilderPackage _exportPackage;
+        private bool _exportPackageOnce;
+        private int _exportTimeout;
+
+        // ERROR:  EndLayoutGroup: BeginLayoutGroup must be called first. 
+        private void Update()
         {
-            Packages.Clear();
-            if (!Directory.Exists(PackagesCfgDirectory))
+            if (_wantToExportAll)
             {
-                Directory.CreateDirectory(PackagesCfgDirectory);
+                _exportTimeout = 2; // Skip two frames after export...
+                _wantToExportAll = false;
+                JEMAssetBuilderExporter.ExportPackages(JEMAssetsBuilderConfiguration.GetDirectory(), Packages.ToArray());          
             }
-            else
+
+            if (_exportPackageOnce)
             {
-                var files = Directory.GetFiles(PackagesCfgDirectory);
-                foreach (var fileName in files)
-                {
-                    if (!fileName.EndsWith(".json"))
-                        continue;
-
-                    JEMAssetBuilderPackage package = null;
-                    try
-                    {
-                        package = JsonConvert.DeserializeObject<JEMAssetBuilderPackage>(File.ReadAllText(fileName));
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogWarning(
-                            $"System was unable to parse {fileName} in to AssetBuilderPackage class. {e.Message}");
-                    }
-
-                    if (package == null)
-                        continue;
-
-                    Packages.Add(package);
-                }
+                _exportTimeout = 2; // Skip two frames after export...
+                _exportPackageOnce = false;
+                ExportAssets(_exportPackage);
+                _exportPackage = null;
             }
         }
-
-        /// <summary>
-        ///     Saves packages cfg to local disc.
-        /// </summary>
-        public static void SavePackages()
-        {
-            foreach (var package in Packages)
-            {
-                var file = $@"{PackagesCfgDirectory}\{package.Name}.json";
-                var dir = Path.GetDirectoryName(file);
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                File.WriteAllText(file, JsonConvert.SerializeObject(package, Formatting.Indented));
-            }
-        }
-
-        /// <summary>
-        ///     Gets package by name.
-        /// </summary>
-        public static JEMAssetBuilderPackage GetPackage(string packageName)
-        {
-            foreach (var pack in Packages)
-                if (pack.Name == packageName)
-                    return pack;
-            return null;
-        }
-
         private void OnGUI()
         {
+            if (_exportTimeout > 0)
+            {
+                _exportTimeout--;
+                return;
+            }
+
             EditorGUILayout.BeginHorizontal();
             {
-                var PackagesWidth = 200;
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(PackagesWidth));
+                const float packagesWidth = 200;
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(packagesWidth));
                 {
-                    _packagesScroll = EditorGUILayout.BeginScrollView(_packagesScroll, EditorStyles.helpBox,
-                        GUILayout.Width(PackagesWidth));
+                    _packagesScroll.value = EditorGUILayout.BeginScrollView(_packagesScroll.value, EditorStyles.helpBox, GUILayout.Width(packagesWidth));
                     if (Packages.Count == 0)
-                        EditorGUILayout.HelpBox("No packages found :/", MessageType.None, true);
+                        EditorGUILayout.HelpBox("No packages found :/", MessageType.Info, true);
                     else
+                    {
+                        GUILayout.Label("Packages:", EditorStyles.boldLabel);
                         for (var index = 0; index < Packages.Count; index++)
                         {
                             var package = Packages[index];
-                            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(PackagesWidth - 8));
-                            GUILayout.Box(package.GetFile(), EditorStyles.helpBox);
+                            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(packagesWidth - 8));
+                            GUILayout.Box(package.Name, EditorStyles.helpBox);
                             if (SelectedPackage == package.Name)
                             {
-                                GUILayout.Box(package.Name + " (Selected)", GUILayout.Width(PackagesWidth - 17));
+                                GUI.enabled = false;
+                                GUI.color = new Color(0.3f, 1.0f, 0.3f, 1.0f);
+                                GUILayout.Button("Selected", GUILayout.Width(65));
+                                GUI.enabled = true;
                             }
                             else
                             {
-                                if (GUILayout.Button(package.Name, GUILayout.Width(PackagesWidth - 17)))
+                                if (GUILayout.Button("Select", GUILayout.Width(65)))
+                                {
                                     SelectedPackage = package.Name;
+                                }
                             }
 
-                            EditorGUILayout.EndVertical();
+                            GUI.color = Color.white;
+                            EditorGUILayout.EndHorizontal();
                         }
 
+                        GUI.color = Color.white;
+                    }
                     EditorGUILayout.EndScrollView();
+
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("Add New")) JEMAssetBuilderAddPackageWindow.ShowWindow();
+                    GUILayout.Label("Packages Options", EditorStyles.boldLabel);
+                    if (GUILayout.Button("Add New", GUILayout.Height(22)))
+                    {
+                        JEMAssetBuilderAddPackageWindow.ShowWindow();
+                    }
 
-                    if (GUILayout.Button("Save")) SavePackages();
+                    if (GUILayout.Button("Save All", GUILayout.Height(22)))
+                    {
+                        SavePackages();
+                    }
 
-                    if (GUILayout.Button("Force reload")) LoadPackages();
+                    if (GUILayout.Button("Reload All", GUILayout.Height(22)))
+                    {
+                        LoadPackages();
+                    }
 
-                    if (GUILayout.Button("Export All")) JEMAssetBuilderExporter.ExportPackages(Packages.ToArray());
+                    if (GUILayout.Button("Export All", GUILayout.Height(22)))
+                    {
+                        _wantToExportAll = true;
+                    }
                 }
                 EditorGUILayout.EndVertical();
 
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                 {
-                    if (!string.IsNullOrEmpty(SelectedPackage))
+                    if (string.IsNullOrEmpty(SelectedPackage))
+                    {
+                        EditorGUILayout.HelpBox("No package selected.", MessageType.Info, true);
+                    }
+                    else
                     {
                         var package = GetPackage(SelectedPackage);
                         if (package == null)
                         {
-                            EditorGUILayout.HelpBox(
-                                "System detect selected package but was unable to resolve it's data.",
-                                MessageType.Error, true);
-                            Debug.LogWarning("System detect selected package but was unable to resolve it's data.");
+                            Debug.LogWarning(
+                                $"JEMAssetBuilderWindow: Selected package detected ({SelectedPackage}) but we was unable to resolve it's data :/ ");
                             SelectedPackage = string.Empty;
                         }
                         else
                         {
                             EditorGUILayout.BeginHorizontal();
                             {
-                                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                                EditorGUILayout.BeginVertical(EditorStyles.helpBox);                
+                                if (package.Assets.Count == 0)
                                 {
-                                    _assetsScroll = EditorGUILayout.BeginScrollView(_assetsScroll);
+                                    EditorGUILayout.HelpBox("The package is empty.", MessageType.Info, true);
+                                }
+                                else
+                                {
+                                    var allAssets = 0;
+                                    _assetsScroll.value = EditorGUILayout.BeginScrollView(_assetsScroll.value);
+                                    GUILayout.Label("Assets:", EditorStyles.boldLabel);
                                     for (var index = 0; index < package.Assets.Count; index++)
                                     {
-                                        EditorGUILayout.BeginHorizontal();
-                                        GUILayout.Label(package.Assets[index].Path);
-                                        GUILayout.FlexibleSpace();
-                                        package.Assets[index].Include =
-                                            EditorGUILayout.Toggle(package.Assets[index].Include);
-                                        if (GUILayout.Button("Remove", GUILayout.Width(100)))
+                                        var asset = package.Assets[index];
+                                        var assetPath = AssetDatabase.GUIDToAssetPath(asset.Guid);
+                                        var assetName = Path.GetFileName(assetPath);
+                                        var assetDependence = AssetDatabase.GetDependencies(assetPath);
+
+                                        GUI.color = index % 2 == 0 ? Color.white : new Color(0.8f, 0.8f, 0.8f, 1f);
+                                        if (!asset.Include)
                                         {
-                                            package.Assets.RemoveAt(index);
-                                            index--;
+                                            GUI.color = GUI.color / 1.2f;
+                                        }
+                                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                                        var drawAsset = new SavedBool($"{nameof(JEMAssetBuilderWindow)}.Package.{package.Name}.Asset.{asset.Guid}", false);
+                                        if (!asset.Include)
+                                        {
+                                            assetName = " (Not Included) " + assetName;
                                         }
 
-                                        EditorGUILayout.EndHorizontal();
-                                    }
+                                        var indexCopy = index;
+                                        drawAsset.value = EditorGUILayout.BeginFoldoutHeaderGroup(drawAsset.value, assetName, menuAction:
+                                        rect =>
+                                        {
+                                            var menu = new GenericMenu();                       
+                                            menu.AddItem(new GUIContent("Remove"), false, () =>
+                                            {
+                                                package.Assets.RemoveAt(indexCopy);
+                                                indexCopy--;
+                                            });
+                                            menu.DropDown(rect);
+                                        });
 
+                                        if (drawAsset.value)
+                                        {
+                                            EditorGUI.indentLevel++;
+                                            EditorGUIUtility.labelWidth += 50f;
+                                            asset.Include = EditorGUILayout.Toggle("Include", asset.Include);
+                                            EditorGUILayout.LabelField("Full path", assetPath);
+                                            EditorGUILayout.LabelField("Dependences (Amount)", assetDependence.Length.ToString());
+                                            if (assetDependence.Length != 1) // do not draw if the only dependence in array is this asset
+                                            { 
+                                                var drawDependence = new SavedBool($"{nameof(JEMAssetBuilderWindow)}.Package.{package.Name}.Asset.{asset.Guid}.Dependence", false);
+                                                drawDependence.value = EditorGUILayout.Foldout(drawDependence.value, "Dependences");
+                                                if (drawDependence.value)
+                                                {
+                                                    EditorGUI.indentLevel++;
+                                                    foreach (var d in assetDependence)
+                                                    {
+                                                        if (assetPath.Equals(d)) continue; // nope
+                                                        EditorGUILayout.LabelField(" ", d);
+                                                    }
+
+                                                    EditorGUI.indentLevel--;
+                                                }
+                                            }
+                                            EditorGUIUtility.labelWidth -= 50f;
+                                            EditorGUI.indentLevel--;
+                                        }
+                                        EditorGUILayout.EndFoldoutHeaderGroup();
+                                        EditorGUILayout.EndVertical();
+                                        GUI.color = Color.white;
+
+                                        if (asset.Include)
+                                        {
+                                            allAssets += assetDependence.Length;
+                                        }
+                                    }
+                                    GUI.color = Color.white;
                                     EditorGUILayout.EndScrollView();
+
+                                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                                    GUILayout.Label("Info", EditorStyles.boldLabel);
+            
+                                    EditorGUILayout.HelpBox($"Total amount of assets to build: {allAssets}", MessageType.Info, true);
+                                    EditorGUILayout.HelpBox("Package Path: " + package.GetFile(), MessageType.Info, true);
+                                    EditorGUILayout.EndVertical();
                                 }
+  
                                 EditorGUILayout.EndVertical();
 
-                                EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(PackagesWidth));
+                                EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(packagesWidth));
+                                GUILayout.Label("Selected Package", EditorStyles.boldLabel);
+                                if (GUILayout.Button("Add Selected Assets", GUILayout.Height(60)))
                                 {
-                                    if (GUILayout.Button("Add Selected Assets", GUILayout.Height(60)))
-                                    {
-                                        if (Selection.objects.Length == 0)
-                                        {
-                                            EditorUtility.DisplayDialog("Oops.",
-                                                "To add selected assets first you need to select assets. (lul)", "Ok");
-                                        }
-                                        else
-                                        {
-                                            var selectedObjects = Selection.objects.Select(AssetDatabase.GetAssetPath)
-                                                .ToArray();
-                                            if (selectedObjects.Length == 0)
-                                                EditorUtility.DisplayDialog("Oops.", "Unexcpeted objects list error.",
-                                                    "Ok");
-                                            else
-                                                foreach (var obj in selectedObjects)
-                                                    if (package.Exist(obj))
-                                                        Debug.LogWarning(
-                                                            $"Copy of {obj} detected. System will skip this object.");
-                                                    else
-                                                        package.AddAsset(obj);
-                                        }
-                                    }
-
-                                    if (GUILayout.Button("Export Assets"))
-                                    {
-                                        if (package.Assets.Count == 0)
-                                            EditorUtility.DisplayDialog("Oops.", "Can't export empty package..", "Ok");
-                                        else
-                                            JEMAssetBuilderExporter.ExportPackages(new[] {package});
-                                    }
-
-                                    GUILayout.FlexibleSpace();
-                                    if (GUILayout.Button("Delete Package")) Packages.Remove(package);
+                                    AddSelectedAssets(package);
                                 }
+
+                                GUILayout.FlexibleSpace();
+                                GUILayout.Label("Danger Zone", EditorStyles.boldLabel);
+                                if (GUILayout.Button("Export Assets", GUILayout.Height(22)))
+                                {
+                                    _exportPackage = package;
+                                    _exportPackageOnce = true;
+                                }
+
+                                if (GUILayout.Button("Delete Package", GUILayout.Height(22)))
+                                {
+                                    var confirm = EditorUtility.DisplayDialog("Delete?", $"Are you sure you want to remove package `{package.Name}`?", "Yes", "No");
+                                    if (confirm)
+                                        RemovePackage(package);
+                                }
+
                                 EditorGUILayout.EndVertical();
                             }
                             EditorGUILayout.EndHorizontal();
@@ -236,32 +285,163 @@ namespace JEM.UnityEditor.AssetBundles
         }
 
         /// <summary>
-        ///     Show window.
+        ///     Adds currently selected assets to target package.
         /// </summary>
-        [MenuItem("Tools/JEM/Assets/Builder")]
-        public static void ShowWindow()
+        /// <exception cref="ArgumentNullException"/>
+        private static void AddSelectedAssets([NotNull] JEMAssetBuilderPackage package)
         {
-            _activeWindow = GetWindow(typeof(JEMAssetBuilderWindow)) as JEMAssetBuilderWindow;
-            if (_activeWindow == null) return;
-            _activeWindow.UpdateTitle();
-            _activeWindow.Show();
+            if (package == null) throw new ArgumentNullException(nameof(package));
+            if (Selection.objects.Length == 0)
+            {
+                EditorUtility.DisplayDialog("Oops.", "To add new assets in to package, first you need to select the assets. (lul)", "Ok!");
+                return;
+            }
+
+            foreach (var obj in Selection.objects)
+            {
+                if (package.Exist(obj))
+                    continue;
+
+                package.AddAsset(obj);
+            }
         }
 
         /// <summary>
-        ///     Local file where flags are stored.
+        ///     Exports assets of target package.
         /// </summary>
-        public static string PackagesCfgDirectory => $@"{Environment.CurrentDirectory}\JEM\AssetBuilder\";
+        /// <exception cref="ArgumentNullException"/>
+        private static void ExportAssets([NotNull] JEMAssetBuilderPackage package)
+        {
+            if (package == null) throw new ArgumentNullException(nameof(package));
+            if (package.Assets.Count == 0)
+                EditorUtility.DisplayDialog("Oops.", "Can't export empty package..", "Ok");
+            else
+            {
+                // Before export make sure that all packages are saved, we do not want to lose any data...
+                SavePackages();
+
+                // Export!
+                JEMAssetBuilderExporter.ExportPackages(JEMAssetsBuilderConfiguration.GetDirectory(), new[] {package});
+            }
+        }
 
         /// <summary>
-        ///     Current packages
+        ///     Removes target package.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"/>
+        public static void RemovePackage([NotNull] JEMAssetBuilderPackage package)
+        {
+            if (package == null) throw new ArgumentNullException(nameof(package));
+            if (!Packages.Contains(package))
+                return;
+
+            var configurationFile = package.GetConfigurationFile();
+            if (File.Exists(configurationFile))
+            {
+                File.Delete(configurationFile);
+            }
+
+            Packages.Remove(package);
+        }
+
+        /// <summary>
+        ///     Adds target package.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"/>
+        public static void AddPackage([NotNull] JEMAssetBuilderPackage package, bool select = true)
+        {
+            if (package == null) throw new ArgumentNullException(nameof(package));
+            if (Packages.Contains(package))
+                return;
+
+            Packages.Add(package);
+            if (select)
+            {
+                SelectedPackage = package.Name;
+            }
+        }
+
+        /// <summary>
+        ///     Loads all packages.
+        /// </summary>
+        public static void LoadPackages()
+        {
+            Packages.Clear();
+
+            if (!Directory.Exists(PackagesConfigurationDirectory))
+                Directory.CreateDirectory(PackagesConfigurationDirectory); // Directory not exist. Just create directory...
+            else
+            {
+                var files = Directory.GetFiles(PackagesConfigurationDirectory, "*.json");
+                foreach (var fileName in files)
+                {
+                    JEMAssetBuilderPackage package = null;
+                    try
+                    {
+                        package = JsonConvert.DeserializeObject<JEMAssetBuilderPackage>(File.ReadAllText(fileName));
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogWarning($"System was unable to parse `{fileName}` in to JEMAssetBuilderPackage class. {e.Message}");
+                    }
+
+                    if (package == null)
+                        continue;
+
+                    Packages.Add(package);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Saves all packages configuration files.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"/>
+        public static void SavePackages()
+        {
+            foreach (var package in Packages)
+            {
+                var filePath = package.GetConfigurationFile();
+                var fileDirectory = Path.GetDirectoryName(filePath);
+                if (!Directory.Exists(fileDirectory))
+                    Directory.CreateDirectory(fileDirectory ?? throw new InvalidOperationException());
+
+                File.WriteAllText(filePath, JsonConvert.SerializeObject(package, Formatting.Indented));
+            }
+        }
+
+        /// <summary>
+        ///     Gets package by name.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"/>
+        public static JEMAssetBuilderPackage GetPackage([NotNull] string packageName)
+        {
+            if (packageName == null) throw new ArgumentNullException(nameof(packageName));
+            foreach (var pack in Packages)
+                if (pack.Name == packageName)
+                    return pack;
+            return null;
+        }
+
+        /// <summary>
+        ///     Show JEM Asset Builder window.
+        /// </summary>
+        [MenuItem("JEM/JEM Asset Builder")]
+        public static void ShowWindow() => GetWindow<JEMAssetBuilderWindow>(true, "JEM Asset Builder", true);
+
+        /// <summary>
+        ///     List of all packages added to JEM Asset Builder.
         /// </summary>
         public static List<JEMAssetBuilderPackage> Packages { get; } = new List<JEMAssetBuilderPackage>();
 
         /// <summary>
+        ///     Path to directory where Asset Builder Packages configuration files are stored.
+        /// </summary>
+        public static string PackagesConfigurationDirectory => $@"{Environment.CurrentDirectory}\JEM\AssetBuilder\";
+
+        /// <summary>
         ///     Currently selected package.
         /// </summary>
-        public static string SelectedPackage;
-
-        private static JEMAssetBuilderWindow _activeWindow;
+        public static string SelectedPackage { get; private set; }
     }
 }

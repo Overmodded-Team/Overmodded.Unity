@@ -10,10 +10,6 @@ using UnityEngine;
 
 namespace JEM.UnityEditor.Attribute
 {
-    /// <inheritdoc />
-    /// <summary>
-    ///     Read only drawer.
-    /// </summary>
     [CustomPropertyDrawer(typeof(JEMReadOnlyAttribute))]
     public class JEMReadOnlyAttributeEditor : PropertyDrawer
     {

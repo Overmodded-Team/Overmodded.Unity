@@ -8,7 +8,6 @@ using JEM.UnityEditor;
 using Overmodded.Gameplay.Character;
 using Overmodded.Gameplay.Level;
 using Overmodded.Unity.Editor.Common;
-using Overmodded.Unity.Editor.Objects;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -73,7 +72,7 @@ namespace Overmodded.Unity.Editor.Custom
             else if (_target.References.ModelRoot == _target.gameObject)
                 EditorGUILayout.HelpBox("Setting this gameObject as ModelRoot may create problems.", MessageType.Warning, true);
 
-            EditorGameUtility.DrawTargetExtras(_target);
+            EditorGUILayoutGameUtility.DrawTargetExtras(_target);
         }
 
         private void RefreshIdentity()

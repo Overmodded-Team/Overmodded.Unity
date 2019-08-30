@@ -4,8 +4,8 @@
 // Copyright (c) 2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
+using JEM.UnityEditor;
 using Overmodded.Unity.Editor.Common;
-using Overmodded.Unity.Editor.Objects;
 using Overmodded.Unity.Editor.SharedSystem;
 using UnityEditor;
 using UnityEngine;
@@ -49,7 +49,7 @@ namespace Overmodded.Unity.Editor.Custom
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
                 EditorGUI.indentLevel++;
-                UniqueGUID.stringValue = EditorGameUtility.GUIDField("Unique GUID", UniqueGUID.stringValue);
+                UniqueGUID.stringValue = EditorGUILayoutGameUtility.GUIDField("Unique GUID", UniqueGUID.stringValue);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
             }
@@ -82,7 +82,7 @@ namespace Overmodded.Unity.Editor.Custom
             EditorGUILayout.EndFoldoutHeaderGroup();
 
             // Draw extras
-            EditorGameUtility.DrawTargetExtras(target);
+            EditorGUILayoutGameUtility.DrawTargetExtras(target);
 
             serializedObject.ApplyModifiedProperties();
         }

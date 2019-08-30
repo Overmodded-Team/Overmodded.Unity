@@ -28,7 +28,7 @@ namespace Overmodded.Gameplay.Character
         public HandsModel HandsPrefab;
 
         [Header("Animation")]
-        public string DefaultAnimatorController = "Default";
+        public int DefaultAnimatorController = 0;
 
         /// <summary>
         ///     Gets name of this character from current locale.

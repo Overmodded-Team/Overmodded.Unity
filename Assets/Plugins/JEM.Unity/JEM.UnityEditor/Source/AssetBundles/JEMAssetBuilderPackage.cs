@@ -4,80 +4,113 @@
 // Copyright (c) 2017-2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
+using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 
 namespace JEM.UnityEditor.AssetBundles
 {
     /// <summary>
-    ///     Asset builder package.
+    ///     JEM Asset Builder item.
     /// </summary>
+    [Serializable]
+    public class JEMAssetBuilderItem
+    {
+        /// <summary>
+        ///     GUID of target asset.
+        /// </summary>
+        public string Guid = string.Empty;
+
+        /// <summary>
+        ///     Defines if this asset should be included in AssetBundle.
+        /// </summary>
+        public bool Include = true;
+    }
+
+    /// <summary>
+    ///     JEM Asset Builder package.
+    /// </summary>
+    [Serializable]
     public class JEMAssetBuilderPackage
     {
         /// <summary>
-        ///     Package asset.
+        ///     Name of the package.
         /// </summary>
-        public class Asset
+        public string Name = string.Empty;
+
+        /// <summary>
+        ///     List of assets added to this package.
+        /// </summary>
+        public List<JEMAssetBuilderItem> Assets = new List<JEMAssetBuilderItem>();
+
+        /// <summary>
+        ///     Gets full path to file of this package.
+        /// </summary>
+        public string GetFile() => $"{JEMAssetsBuilderConfiguration.GetDirectory()}\\{Name}{JEMAssetsBuilderConfiguration.GetExtension()}";
+
+        /// <summary>
+        ///     Gets full path to package configuration file.
+        /// </summary>
+        public string GetConfigurationFile() => $@"{JEMAssetBuilderWindow.PackagesConfigurationDirectory}\{Name}.json";
+
+        /// <summary>
+        ///     Returns array of paths to all assets added to this Package.
+        /// </summary>
+        public string[] GetPathToAssets() => Assets.Select(asset => AssetDatabase.GUIDToAssetPath(asset.Guid)).ToArray();     
+
+        /// <summary>
+        ///     Adds new asset to this package.
+        /// </summary>
+        public void AddAsset([NotNull] global::UnityEngine.Object obj)
         {
-            /// <summary>
-            ///     Include flag.
-            /// </summary>
-            public bool Include;
-
-            /// <summary>
-            ///     Path to asset.
-            /// </summary>
-            public string Path;
-        }
-
-        /// <summary>
-        ///     Assets of package.
-        /// </summary>
-        public List<Asset> Assets;
-
-        /// <summary>
-        ///     Directory of package.
-        /// </summary>
-        public string Directory;
-
-        /// <summary>
-        ///     Name of package.
-        /// </summary>
-        public string Name;
-
-        /// <summary>
-        ///     Gets file of package.
-        /// </summary>
-        public string GetFile()
-        {
-            return $"{Directory}/{Name}{JEMAssetsBuilderConfiguration.GetExtension()}";
-        }
-
-        /// <summary>
-        ///     Adds new asset.
-        /// </summary>
-        /// <param name="assetPath"></param>
-        public void AddAsset(string assetPath)
-        {
-            if (Exist(assetPath))
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            var objGuid = GetObjectGUID(obj);
+            if (Exist(objGuid))
                 return;
 
-            Assets.Add(new Asset
+            var newAsset = new JEMAssetBuilderItem
             {
-                Path = assetPath,
+                Guid = objGuid,
                 Include = true
-            });
+            };
+
+            Assets.Add(newAsset);
         }
 
         /// <summary>
-        ///     Checks if asset of given path exists in this package.
+        ///     Checks if given asset is added to this package.
         /// </summary>
-        public bool Exist(string assetPath)
+        /// <exception cref="ArgumentNullException"/>
+        public bool Exist([NotNull] global::UnityEngine.Object obj)
         {
-            foreach (var asset in Assets)
-                if (asset.Path == assetPath)
-                    return true;
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            var guid = GetObjectGUID(obj);
+            return Assets.Any(asset => asset.Guid == guid);
+        }
 
-            return false;
+        /// <summary>
+        ///     Checks if asset of given GUID is added to this package.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"/>
+        public bool Exist([NotNull] string guid)
+        {
+            if (guid == null) throw new ArgumentNullException(nameof(guid));
+            return Assets.Any(asset => asset.Guid == guid);
+        }
+
+        /// <exception cref="NullReferenceException">Received when AssetDatabase fails to find GUID of target Object.</exception>
+        /// <exception cref="ArgumentNullException"/>
+        internal static string GetObjectGUID([NotNull] global::UnityEngine.Object obj)
+        {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (AssetDatabase.TryGetGUIDAndLocalFileIdentifier(obj, out var guid, out long _))
+            {
+                return guid;
+            }
+
+            throw new NullReferenceException($"We failed to get a GUID of Object of type {obj.GetType()}");
         }
     }
 }

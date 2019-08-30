@@ -21,7 +21,7 @@ MonoBehaviour:
     - Name: c_characters1
       Records:
       - Name: TestCharacterSettings
-        Identity: -6184
+        Identity: -1400913985
         Properties:
         - Key: Icon
           Value: null
@@ -34,13 +34,13 @@ MonoBehaviour:
         - Key: HandsPrefab
           Value: TestCharacterHands (Overmodded.Gameplay.Character.Rendering.HandsModel)
         - Key: DefaultAnimatorController
-          Value: Default
+          Value: 451446624
   - TypeName: Overmodded.Gameplay.Level.Materials.MaterialsDatabase
     Databases:
     - Name: c_materials1
       Records:
       - Name: testMaterial
-        Identity: -30199
+        Identity: 459964862
         Properties:
         - Key: HitParticle
           Value: null
@@ -51,12 +51,12 @@ MonoBehaviour:
     - Name: c_weapons1
       Records:
       - Name: M4A1
-        Identity: 8507
+        Identity: 1913921381
         Properties:
         - Key: Type
           Value: Rifle
         - Key: AnimatorController
-          Value: m4a1
+          Value: 104581176
         - Key: FPPModel
           Value: M4A1 Sopmod (FPP) (Overmodded.Gameplay.Character.Weapons.WeaponModel)
         - Key: TPPModel
@@ -133,15 +133,13 @@ MonoBehaviour:
           Value: UnityEngine.AudioClip[]
         - Key: FireSoundPitchRange
           Value: 0,2
-  - TypeName: Overmodded.Gameplay.Character.Rendering.CharacterAnimatorDatabase
+  - TypeName: Overmodded.Gameplay.Character.CharacterAnimatorDatabase
     Databases:
     - Name: c_animations1
       Records:
       - Name: animator_default
-        Identity: -2809
+        Identity: 451446624
         Properties:
-        - Key: Name
-          Value: default
         - Key: CharacterController
           Value: animator_default (UnityEngine.AnimatorController)
         - Key: HandsSimulationModel
@@ -155,10 +153,8 @@ MonoBehaviour:
         - Key: AnimatorAim
           Value: Aim
       - Name: animator_m4a1
-        Identity: -4729
+        Identity: 104581176
         Properties:
-        - Key: Name
-          Value: m4a1
         - Key: CharacterController
           Value: animator_m4a1 (UnityEngine.AnimatorController)
         - Key: HandsSimulationModel

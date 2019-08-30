@@ -4,11 +4,11 @@
 // Copyright (c) 2017-2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
@@ -17,9 +17,13 @@ namespace JEM.UnityEditor.AssetBundles
 {
     /// <summary>
     ///     Asset builder exporter class.
+    ///     Core AssetBundles export methods of JEMAssetBuilder.
     /// </summary>
     public static class JEMAssetBuilderExporter
     {
+        public const BuildAssetBundleOptions BundleOptions = BuildAssetBundleOptions.None;
+        public const BuildTarget BundleBuildTarget = BuildTarget.StandaloneWindows;
+
         /// <summary>
         ///     Exports selected assets directly.
         /// </summary>
@@ -27,91 +31,104 @@ namespace JEM.UnityEditor.AssetBundles
         public static void ExportSelectedDirectly(MenuCommand menuCommand)
         {
             if (Selection.objects.Length == 0)
-            {
                 EditorUtility.DisplayDialog("Oops.", "No assets selected to build.", "Ok");
-            }
             else
             {
-                JEMAssetsBuilderConfiguration.LoadConfiguration();
+                // Try to load configuration first
+                JEMAssetsBuilderConfiguration.TryLoadConfiguration();
 
-                var path = EditorUtility.SaveFilePanel("Export assets", Environment.CurrentDirectory, "assets",
-                    JEMAssetsBuilderConfiguration.GetExtension().Remove(0, 1));
+                // Get save file path
+                var path = EditorUtility.SaveFilePanel("Export Assets", Environment.CurrentDirectory, "myAssetBundle", JEMAssetsBuilderConfiguration.GetExtension().Remove(0, 1));
                 if (string.IsNullOrEmpty(path))
                     return;
-
+            
+                // Export directly.
                 ExportDirectly(path, Selection.objects);
             }
         }
 
         /// <summary>
-        ///     Exports given objects directly.
+        ///     Exports directly target array of objects.
         /// </summary>
-        public static void ExportDirectly(string path, Object[] objects)
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="InvalidOperationException"/>
+        public static void ExportDirectly([NotNull] string filePath, [NotNull] Object[] objects)
         {
-            if (objects.Length == 0)
-                return;
-            if (string.IsNullOrEmpty(path))
-                return;
-            JEMAssetsBuilderConfiguration.LoadConfiguration();
+            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+            if (objects == null) throw new ArgumentNullException(nameof(objects));
+            if (objects.Length == 0) return;
+            if (string.IsNullOrEmpty(filePath)) return;
+  
+            // Try to load configuration first
+            JEMAssetsBuilderConfiguration.Load();
 
+            // Create package from received data
             var package = new JEMAssetBuilderPackage
             {
-                Name = Path.GetFileName(path)
-                    .Remove(Path.GetFileName(path).Length - JEMAssetsBuilderConfiguration.GetExtension().Length,
-                        JEMAssetsBuilderConfiguration.GetExtension().Length),
-                Directory = Path.GetDirectoryName(path),
-                Assets = new List<JEMAssetBuilderPackage.Asset>()
+                Name = Path.GetFileName(filePath).Remove(Path.GetFileName(filePath).Length - JEMAssetsBuilderConfiguration.GetExtension().Length, 
+                    JEMAssetsBuilderConfiguration.GetExtension().Length)
             };
 
-            foreach (var file in objects.Select(AssetDatabase.GetAssetPath))
-                package.Assets.Add(new JEMAssetBuilderPackage.Asset
-                {
-                    Path = file,
-                    Include = true
-                });
+            // Write objects to new package
+            foreach (var obj in objects)
+                package.AddAsset(obj);
 
-            ExportPackages(new[] {package});
+            // Export package.
+            ExportPackages(Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException(), new[] {package});
         }
 
         /// <summary>
-        ///     Exports list of packages.
+        ///     Export received array of packages.
         /// </summary>
-        /// <param name="packages"></param>
-        public static void ExportPackages(JEMAssetBuilderPackage[] packages)
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="ArgumentException"/>
+        public static void ExportPackages([NotNull] string directory, [NotNull] JEMAssetBuilderPackage[] packages)
         {
-            EditorUtility.DisplayProgressBar("Exporting asset packages.", "Preparing to export.", 0);
+            if (directory == null) throw new ArgumentNullException(nameof(directory));
+            if (packages == null) throw new ArgumentNullException(nameof(packages));
+            if (packages.Length == 0)
+                throw new ArgumentException("Value cannot be an empty collection.", nameof(packages));
+            EditorUtility.DisplayProgressBar("JEM Asset Builder", "Starting up.", 0);
 
-            for (var index = 0; index < packages.Length; index++)
+            try
             {
-                var package = packages[index];
-                EditorUtility.DisplayProgressBar("Exporting asset packages.", "Exporting " + package.Name,
-                    (float) index / packages.Length);
+                var bundleBuildDirectory = JEMAssetsBuilderConfiguration.GetDirectory();
+                var bundleBuildList = new List<AssetBundleBuild>();
+                for (var index = 0; index < packages.Length; index++)
+                {
+                    var package = packages[index];
+                    EditorUtility.DisplayProgressBar("JEM Asset Builder", "Preparing to export: " + package.Name,
+                        (float) index / packages.Length * 100f);
 
-                var file = package.GetFile();
-                var fileName = Path.GetFileName(file);
-                var directoryName = Path.GetDirectoryName(file);
-                var bundleBuild = new AssetBundleBuild[1];
+                    var filePath = package.GetFile();
+                    var fileName = Path.GetFileName(filePath);
+                    var bundleBuildData = new AssetBundleBuild
+                    {
+                        assetBundleName = fileName,
+                        assetNames = package.GetPathToAssets()
+                    };
 
-                bundleBuild[0].assetBundleName = fileName;
-                var assets = new List<string>();
-                foreach (var asset in package.Assets)
-                    if (asset.Include)
-                        assets.Add(asset.Path);
-                bundleBuild[0].assetNames = assets.ToArray();
+                    bundleBuildList.Add(bundleBuildData);
+                }
 
-                Debug.LogWarning($"PACKAGE EXPORT to file {package.GetFile()}");
-                var manifest = BuildPipeline.BuildAssetBundles(directoryName, bundleBuild,
-                    BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
+                EditorUtility.DisplayProgressBar("JEM Asset Builder", "Starting Unity's AssetBundles building.", 0f);
+
+                var manifest = BuildPipeline.BuildAssetBundles(bundleBuildDirectory, bundleBuildList.ToArray(), BundleOptions, BundleBuildTarget);
                 if (manifest != null && manifest.GetAllAssetBundles().Length != 0)
                 {
-                    Debug.Log($"PACKAGE EXPORT ({package.Name}) SUCCESS!");
-                    if (directoryName != null)
-                        Process.Start(directoryName);
+                    Debug.Log($"JEM Asset Builder successfully build {bundleBuildList.Count} packages!");
+                   
+                    // Show target directory in File Explorer
+                    Process.Start(bundleBuildDirectory);
                 }
                 else
                 {
-                    Debug.LogError($"PACKAGE EXPORT ERROR! [ IsNULL -> {manifest == null} ]");
+                    Debug.LogError($"JEM Asset Builder failed to build {bundleBuildList.Count} packages of Asset Bundles.");
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
             }
 
             EditorUtility.ClearProgressBar();

@@ -13,7 +13,7 @@ using UnityEngine;
 namespace JEM.UnityEditor.Extension
 {
     /// <summary>
-    ///     Set of utility extensions to String class.
+    ///     Set of utility methods: Animator
     /// </summary>
     public static class JEMExtensionAnimatorEditor
     {
