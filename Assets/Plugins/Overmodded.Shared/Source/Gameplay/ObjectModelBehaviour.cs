@@ -16,7 +16,7 @@ namespace Overmodded.Gameplay
         AnimationsShadowsOnly,
         DefaultCulled,
         AlwaysDrawAndAnimate,
-        DefaultCulledNotMotionVectors,
+        DefaultCulledNoMotionVectors,
         DefaultCulledObjectMotionVectors,
         AnimationsOnly,
     }
@@ -210,7 +210,7 @@ namespace Overmodded.Gameplay
                             skinned.updateWhenOffscreen = true;
                     }
                     break;
-                case ModelRenderType.DefaultCulledNotMotionVectors:
+                case ModelRenderType.DefaultCulledNoMotionVectors:
                     if (Animator) Animator.cullingMode = AnimatorCullingMode.CullCompletely;
                     foreach (var r in Renderers)
                     {

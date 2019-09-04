@@ -4,8 +4,8 @@
 // Copyright (c) 2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
-using System;
 using JetBrains.Annotations;
+using System;
 using UnityEngine;
 
 namespace JEM.UnityEngine.Extension
@@ -19,9 +19,10 @@ namespace JEM.UnityEngine.Extension
         ///     Look at smooth
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void LookAtSmooth([NotNull] this Transform transform, Transform target, float time = 10f)
+        public static void LookAtSmooth([NotNull] this Transform transform, [NotNull] Transform target, float time = 10f)
         {
             if (transform == null) throw new ArgumentNullException(nameof(transform));
+            if (target == null) throw new ArgumentNullException(nameof(target));
             LookAtSmooth(transform, target.position, time);
         }
 

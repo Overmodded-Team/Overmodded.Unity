@@ -750,35 +750,36 @@
         </member>
         <member name="T:JEM.Core.Debugging.JEMLogType">
             <summary>
-                Log type of JEMLogger.
+                JEM Log Type.
+                Defines a log type of JEMLogger.
             </summary>
         </member>
         <member name="F:JEM.Core.Debugging.JEMLogType.Log">
             <summary>
-                Log.
+                Info log type.
             </summary>
         </member>
         <member name="F:JEM.Core.Debugging.JEMLogType.Warning">
             <summary>
-                Warning.
+                Warning log type.
             </summary>
         </member>
         <member name="F:JEM.Core.Debugging.JEMLogType.Error">
             <summary>
-                Error.
+                Error log type.
             </summary>
         </member>
         <member name="F:JEM.Core.Debugging.JEMLogType.Exception">
             <summary>
-                Exception.
+                Exception log type.
             </summary>
         </member>
-        <member name="T:JEM.Core.Debugging.JEMLogger">
+        <member name="F:JEM.Core.Debugging.JEMLogType.Assert">
             <summary>
-                Logger class.
+                Assertion log type.
             </summary>
         </member>
-        <member name="T:JEM.Core.Debugging.JEMLogger.LogAppend">
+        <member name="T:JEM.Core.Debugging.JEMLogAppend">
             <summary>
                 Log append event.
             </summary>
@@ -787,9 +788,15 @@
             <param name="value">Value of log.</param>
             <param name="stackTrace">Stack trace of log.</param>
         </member>
+        <member name="T:JEM.Core.Debugging.JEMLogger">
+            <summary>
+                JEM Logger.
+                A logs controller class.
+            </summary>
+        </member>
         <member name="E:JEM.Core.Debugging.JEMLogger.OnLogAppended">
             <summary>
-                Event called when new log has been appended.
+                Event called when new log has been received.
             </summary>
         </member>
         <member name="F:JEM.Core.Debugging.JEMLogger.LoggerWorkDirectoryName">
@@ -802,25 +809,25 @@
                 Log file extension.
             </summary>
         </member>
-        <member name="P:JEM.Core.Debugging.JEMLogger.LoggerCustomRootDirectory">
+        <member name="P:JEM.Core.Debugging.JEMLogger.Disabled">
             <summary>
-                Logger's custom root directory.
-                If empty, logger will get default current directory.
+                If true, the Logger wil ignore every log received.
             </summary>
         </member>
-        <member name="P:JEM.Core.Debugging.JEMLogger.SilentMode">
+        <member name="P:JEM.Core.Debugging.JEMLogger.AlwaysThrowStacktrace">
             <summary>
-                If silent mode is enabled, logger will ignore every log they receive.
-            </summary>
-        </member>
-        <member name="P:JEM.Core.Debugging.JEMLogger.TotalStackTrace">
-            <summary>
-                Is total stack trace of every log type enabled.
+                If true, Logger will try to deliver stackTrace for every log type.
             </summary>
         </member>
         <member name="P:JEM.Core.Debugging.JEMLogger.DateTimeNowText">
             <summary>
                 DateTime.Now string formatted for text.
+            </summary>
+        </member>
+        <member name="P:JEM.Core.Debugging.JEMLogger.LoggerCustomDirectory">
+            <summary>
+                Logger's custom root directory.
+                If empty, logger will get default current directory.
             </summary>
         </member>
         <member name="P:JEM.Core.Debugging.JEMLogger.LoggerWorkDirectory">
@@ -833,11 +840,15 @@
                 Prefix of logger files. Based on process name.
             </summary>
         </member>
+        <member name="M:JEM.Core.Debugging.JEMLogger.GetLogFile(System.String,System.String)">
+            <summary>
+                Gets a log file name.
+            </summary>
+        </member>
         <member name="M:JEM.Core.Debugging.JEMLogger.FixLoggerWorkDirectory">
             <summary>
-                Fixes logger work directory.
+                Fixes logger work directory by checking if working directory not exists.
             </summary>
-            <returns></returns>
         </member>
         <member name="M:JEM.Core.Debugging.JEMLogger.BuildFilePatch(System.String)">
             <summary>
@@ -860,7 +871,8 @@
         </member>
         <member name="M:JEM.Core.Debugging.JEMLogger.GetTrace(System.String)">
             <summary>
-                Gets stack trace.
+                Gets the stackTrace.
+                If originalTrace parameter is null or empty, Logger will try to generate new StackTrace from this point.
             </summary>
         </member>
         <member name="M:JEM.Core.Debugging.JEMLogger.AppendLog(System.String,JEM.Core.Debugging.JEMLogType,System.String,System.String,System.String)">
@@ -941,6 +953,16 @@
             <param name="customCondition">Condition of exception.</param>
             <param name="customFile">Custom file name.</param>
             <param name="source">Name of source of this log.</param>
+            <returns>Is log been successfully appended by system?</returns>
+        </member>
+        <member name="M:JEM.Core.Debugging.JEMLogger.LogAssert(System.String,System.String,System.String,System.String)">
+            <summary>
+                Append assert log.
+            </summary>
+            <param name="value">Value of log.</param>
+            <param name="customFile">Custom file name.</param>
+            <param name="source">Name of source of this log.</param>
+            <param name="originalTrace">Original trace.</param>
             <returns>Is log been successfully appended by system?</returns>
         </member>
         <member name="M:JEM.Core.Debugging.JEMLogger.InternalLog(System.String,System.String)">

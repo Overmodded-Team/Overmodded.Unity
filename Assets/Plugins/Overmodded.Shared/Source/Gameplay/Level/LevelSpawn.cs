@@ -12,11 +12,45 @@ using UnityEngine;
 
 namespace Overmodded.Gameplay.Level
 {
+    /// <inheritdoc />
+    /// <summary>
+    ///     Level spawn component.
+    /// </summary>
+    [RequireComponent(typeof(LevelObject))]
     public class LevelSpawn : QNetSpawnArea
     {
+        /// <summary>
+        ///     Name of the spawn.
+        /// </summary>
         [Header("Level Spawn Settings")]
         public string SpawnName = "unknown";
+
+        /// <summary>
+        ///     Defines if this spawn is a default one.
+        /// </summary>
         public bool IsDefault;
+
+        /// <summary>
+        ///     Collects new character (spawn) position.
+        /// </summary>
+        public void CollectNewCharacterPosition(out Vector3 spawnPosition, out Quaternion spawnRotation)
+        {
+            CollectNewCharacterPosition(out spawnPosition, out spawnRotation, AgentHeight);
+        }
+
+        /// <summary>
+        ///     Collects new character (spawn) position.
+        /// </summary>
+        public void CollectNewCharacterPosition(out Vector3 spawnPosition, out Quaternion spawnRotation,
+            float controllerHeight)
+        {
+            var height = AgentHeight;
+            AgentHeight = controllerHeight;
+            GenerateReliablePoint(out spawnPosition, out var spawnForward);
+            AgentHeight = height;
+            spawnPosition += Vector3.up * (controllerHeight / 2f);
+            spawnRotation = Quaternion.LookRotation(spawnForward);
+        }
 
         /// <summary>
         ///     Gets random spawn area from current world.
@@ -29,7 +63,7 @@ namespace Overmodded.Gameplay.Level
         public static LevelSpawn GetRandomSpawnArea(bool onlyDefault)
         {
             var spawnPoints = FindObjectsOfType<LevelSpawn>();
-            if (spawnPoints.Length == 0)
+            if (spawnPoints == null || spawnPoints.Length == 0)
                 throw new InvalidOperationException("System was unable to get spawn area. There is no spawn areas in current world.");
 
             if (onlyDefault)

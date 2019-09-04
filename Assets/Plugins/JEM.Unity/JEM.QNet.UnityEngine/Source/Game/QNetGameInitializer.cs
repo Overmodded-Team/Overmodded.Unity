@@ -349,11 +349,8 @@ namespace JEM.QNet.UnityEngine.Game
                 JEMLogger.Log(
                     $"QNetUnity find and will destroy {QNetObjectBehaviour.SpawnedBehaviours.Length} additional objects that has been created not by QNetWorldSerializer.");
 
-            while (QNetObjectBehaviour.SpawnedBehaviours.Length > 0)
-            {
-                QNetObjectBehaviour.InternalDestroy(QNetObjectBehaviour.SpawnedBehaviours[0]);
-                yield return new WaitForEndOfFrame();
-            }
+            // Destroy all behaviours
+            yield return QNetObjectBehaviour.DestroyAll();
 
             // activate loading screen
             OnClientLoadingInfoUpdated?.Invoke(true, "UNLOADING LEVEL", "Unloading level.");

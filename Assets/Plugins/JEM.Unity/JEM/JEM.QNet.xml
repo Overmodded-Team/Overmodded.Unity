@@ -214,6 +214,12 @@
                 Reads bytes array.
             </summary>
         </member>
+        <member name="M:JEM.QNet.Messages.QNetMessageReader.ReadArray``1(System.Func{``0})">
+            <summary>
+                Reads a array.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"/>
+        </member>
         <member name="M:JEM.QNet.Messages.QNetMessageReader.SkipPadBits">
             <summary/>
         </member>
@@ -306,10 +312,11 @@
                 Write raw bytes array directly.
             </summary>
         </member>
-        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteObject(System.Object)">
+        <member name="M:JEM.QNet.Messages.QNetMessageWriter.WriteArray``1(``0[],System.Action{``0})">
             <summary>
-                Writes object to array.
+                Writes a array.
             </summary>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:JEM.QNet.Messages.QNetMessageWriter.WritePadBites">
             <summary/>

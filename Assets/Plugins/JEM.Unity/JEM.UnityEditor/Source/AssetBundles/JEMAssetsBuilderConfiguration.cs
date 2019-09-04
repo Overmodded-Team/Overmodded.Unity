@@ -26,6 +26,16 @@ namespace JEM.UnityEditor.AssetBundles
         public string PackageDirectory = "Exported";
 
         /// <summary>
+        ///     If false, the asset bundles will receive no compression at all.
+        /// </summary>
+        public bool CompressAssetBundles = true;
+
+        /// <summary>
+        ///     If false, the Stream Compressed (LZMA) method will be used instead of Chuck Compressed (LZ4) method.
+        /// </summary>
+        public bool ChunkBasedAssetBundlesCompression = true;
+
+        /// <summary>
         ///     Gets the file extension of AssetBundles.
         /// </summary>
         public static string GetExtension() => $".{Configuration.PackageExtension}";

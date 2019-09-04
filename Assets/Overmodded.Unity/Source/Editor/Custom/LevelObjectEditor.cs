@@ -68,7 +68,7 @@ namespace Overmodded.Unity.Editor.Custom
             EditorGUILayout.EndFoldoutHeaderGroup();
 
             if (_target.References.ModelRoot == null)
-                EditorGUILayout.HelpBox("ModelRoot of level object need to be set!", MessageType.Error, true);
+                EditorGUILayout.HelpBox("ModelRoot of level object is not set!", MessageType.Warning, true);
             else if (_target.References.ModelRoot == _target.gameObject)
                 EditorGUILayout.HelpBox("Setting this gameObject as ModelRoot may create problems.", MessageType.Warning, true);
 

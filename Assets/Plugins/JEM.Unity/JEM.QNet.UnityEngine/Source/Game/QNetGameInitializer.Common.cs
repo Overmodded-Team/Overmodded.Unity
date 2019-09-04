@@ -4,6 +4,7 @@
 // Copyright (c) 2017-2019 ADAM MAJCHEREK ALL RIGHTS RESERVED
 //
 
+using System;
 using JEM.Core.Debugging;
 using JEM.QNet.UnityEngine.Behaviour;
 using JEM.QNet.UnityEngine.World;
@@ -49,11 +50,8 @@ namespace JEM.QNet.UnityEngine.Game
                 JEMLogger.Log(
                     $"QNetUnity find and will destroy {QNetObjectBehaviour.SpawnedBehaviours.Length} additional objects that has been created not by QNetWorldSerializer.");
 
-            while (QNetObjectBehaviour.SpawnedBehaviours.Length > 0)
-            {
-                QNetObjectBehaviour.InternalDestroy(QNetObjectBehaviour.SpawnedBehaviours[0]);
-                yield return new WaitForEndOfFrame();
-            }
+            // Destroy all behaviours
+            yield return QNetObjectBehaviour.DestroyAll();
 
             // clear behaviours just for sure
             QNetObjectBehaviour.ClearBehaviours();

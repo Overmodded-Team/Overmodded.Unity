@@ -42,52 +42,59 @@ namespace JEM.UnityEditor.Configuration
         
         private void OnGUI()
         {
-            EditorGUILayout.BeginHorizontal();       
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(126));    
-            SelectedTab = GUILayout.SelectionGrid(SelectedTab, Tabs, 1);
-            GUILayout.FlexibleSpace();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(126));
+            { 
+                SelectedTab = GUILayout.SelectionGrid(SelectedTab, Tabs, 1);
+                GUILayout.FlexibleSpace();
 
-            var save = false;
-            switch (SelectedTab)
-            {
-                case 0:
-                    break;
-                case 1:
-                    if (GUILayout.Button("Force Reload\nJEM Resources", GUILayout.Width(126), GUILayout.Height(40)))
-                        JEMEditorResources.Load(true);
-                    save = true;
-                    break;
-                case 2:
-                case 3:
-                    save = true;
-                    break;
+                var drawSave = false;
+                switch (SelectedTab)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        if (GUILayout.Button("Force Reload\nJEM Resources", GUILayout.Height(40)))
+                            JEMEditorResources.Load(true);
+                        drawSave = true;
+                        break;
+                    case 2:
+                    case 3:
+                        drawSave = true;
+                        break;
+                }
+
+                if (drawSave)
+                {
+                    if (GUILayout.Button("Save"))
+                        SaveConfigurationData();
+                }
+
             }
-
-            if (save)
-                if (GUILayout.Button("Save", GUILayout.Width(126)))
-                    SaveConfigurationData();       
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);             
-            switch (SelectedTab)
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             {
-                case 0: // About
-                    OnAboutGUI();
-                    break;
-                case 1: // Core Settings
-                    OnCoreSettingsGUI();
-                    break;
-                case 2: // Editor Settings
-                    OnEditorSettingsGUI();
-                    break;
-                case 3: // AssetBundles Settings
-                    OnAssetBundlesSettingsGUI();
-                    break;
-                default:
-                    EditorGUILayout.HelpBox("You are trying to draw page that not exist or is implemented yet :/", 
-                        MessageType.Error, true);
-                    break;
-            } 
+                switch (SelectedTab)
+                {
+                    case 0: // About
+                        OnAboutGUI();
+                        break;
+                    case 1: // Core Settings
+                        OnCoreSettingsGUI();
+                        break;
+                    case 2: // Editor Settings
+                        OnEditorSettingsGUI();
+                        break;
+                    case 3: // AssetBundles Settings
+                        OnAssetBundlesSettingsGUI();
+                        break;
+                    default:
+                        EditorGUILayout.HelpBox("You are trying to draw page that not exist or is implemented yet :/",
+                            MessageType.Error, true);
+                        break;
+                }
+            }
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
         }
@@ -137,6 +144,7 @@ namespace JEM.UnityEditor.Configuration
 
         private void OnAssetBundlesSettingsGUI()
         {
+            EditorGUIUtility.labelWidth += 25f;
             var cfg = JEMAssetsBuilderConfiguration.Configuration;
 
             GUILayout.Label("JEM AssetBuilder Settings", EditorStyles.boldLabel);
@@ -156,6 +164,24 @@ namespace JEM.UnityEditor.Configuration
                     cfg.PackageDirectory = ExtensionPath.ResolveRelativeFilePath(directory);
                 }
             });
+
+            cfg.CompressAssetBundles = EditorGUILayout.Toggle("Asset Bundles Compression", cfg.CompressAssetBundles);
+            if (cfg.CompressAssetBundles)
+            {
+                EditorGUI.indentLevel++;
+                cfg.ChunkBasedAssetBundlesCompression = EditorGUILayout.Toggle("Chunk Based", cfg.ChunkBasedAssetBundlesCompression);
+                if (cfg.ChunkBasedAssetBundlesCompression)
+                {
+                    EditorGUILayout.HelpBox("Chunk Compressed (LZ4) compression method.", MessageType.Info, true);
+                }
+                else
+                {
+                    EditorGUILayout.HelpBox("Stream Compressed (LZMA) compression method.", MessageType.Info, true);
+                }
+
+                EditorGUI.indentLevel--;
+            }
+            EditorGUIUtility.labelWidth -= 25f;
         }
 
         /// <summary>
@@ -176,8 +202,8 @@ namespace JEM.UnityEditor.Configuration
         public static void ShowWindow()
         {
             var activeWindow = GetWindow<JEMConfigurationWindow>(true, "JEM Configuration", true);
-            activeWindow.maxSize = new Vector2(450, 350);
-            activeWindow.minSize = new Vector2(450, 350);
+            activeWindow.maxSize = new Vector2(480, 350);
+            activeWindow.minSize = activeWindow.maxSize;
         }
     }
 }

@@ -21,7 +21,19 @@ namespace JEM.UnityEditor.AssetBundles
     /// </summary>
     public static class JEMAssetBuilderExporter
     {
-        public const BuildAssetBundleOptions BundleOptions = BuildAssetBundleOptions.None;
+        public static BuildAssetBundleOptions BaseBundleOptions
+        {
+            get
+            {
+                if (!JEMAssetsBuilderConfiguration.Configuration.CompressAssetBundles)
+                    return BuildAssetBundleOptions.UncompressedAssetBundle;
+
+                return JEMAssetsBuilderConfiguration.Configuration.ChunkBasedAssetBundlesCompression
+                    ? BuildAssetBundleOptions.ChunkBasedCompression
+                    : BuildAssetBundleOptions.None;
+            }
+        }
+
         public const BuildTarget BundleBuildTarget = BuildTarget.StandaloneWindows;
 
         /// <summary>
@@ -113,7 +125,7 @@ namespace JEM.UnityEditor.AssetBundles
 
                 EditorUtility.DisplayProgressBar("JEM Asset Builder", "Starting Unity's AssetBundles building.", 0f);
 
-                var manifest = BuildPipeline.BuildAssetBundles(bundleBuildDirectory, bundleBuildList.ToArray(), BundleOptions, BundleBuildTarget);
+                var manifest = BuildPipeline.BuildAssetBundles(bundleBuildDirectory, bundleBuildList.ToArray(), BaseBundleOptions, BundleBuildTarget);
                 if (manifest != null && manifest.GetAllAssetBundles().Length != 0)
                 {
                     Debug.Log($"JEM Asset Builder successfully build {bundleBuildList.Count} packages!");

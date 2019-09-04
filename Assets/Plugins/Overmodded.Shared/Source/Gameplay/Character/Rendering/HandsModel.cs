@@ -69,7 +69,7 @@ namespace Overmodded.Gameplay.Character.Rendering
             }
 
             // update render type
-            SetModelRenderType(ModelRenderType.DefaultCulledObjectMotionVectors);
+            SetModelRenderType(ModelRenderType.DefaultCulledNoMotionVectors);
         }
     }
 }

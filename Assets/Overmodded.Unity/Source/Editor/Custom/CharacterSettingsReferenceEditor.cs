@@ -28,6 +28,11 @@ namespace Overmodded.Unity.Editor.Custom
         public override void OnInspectorGUI()
         {
             _target.CharacterSettingsIdentity = EditorGUILayoutGameUtility.CharacterSettingsField("Character Settings", _target.CharacterSettingsIdentity);
+
+            // Draw extras!
+            EditorGUILayout.Space();
+            EditorGUILayout.Space();
+            EditorGUILayoutGameUtility.DrawTargetExtras(target);
         }
     }
 }

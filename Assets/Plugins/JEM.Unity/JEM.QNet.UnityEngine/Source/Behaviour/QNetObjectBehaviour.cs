@@ -11,6 +11,7 @@ using JEM.QNet.UnityEngine.Game;
 using JEM.QNet.UnityEngine.Messages;
 using JetBrains.Annotations;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -350,13 +351,24 @@ namespace JEM.QNet.UnityEngine.Behaviour
             InternalDestroy(obj);
         }
 
+        internal static IEnumerator DestroyAll()
+        {
+            var index = SpawnedBehaviours.Length;
+            while (SpawnedBehaviours.Length > 0 && index > 0)
+            {
+                InternalDestroy(SpawnedBehaviours[0]);
+                index--;
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
         /// <summary>
         ///     Destroy given object in local world of QNet.
         /// </summary>
         /// <param name="obj">Object to destroy.</param>
         public static void InternalDestroy([NotNull] QNetObjectBehaviour obj)
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (obj == null) return;
             obj.Spawned = false;
             obj.OnInternalDestroy();
             obj.OwnerIdentity = 0;
